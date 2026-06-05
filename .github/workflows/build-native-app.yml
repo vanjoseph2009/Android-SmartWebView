@@ -5,6 +5,9 @@ on:
     branches: [ master, main ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Força o ambiente global a rodar no Node 24 limpo
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,14 +22,17 @@ jobs:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Configurar Android SDK ferramentas de compilação
+    - name: Configurar Android SDK e Aceitar Licenças
       uses: android-actions/setup-android@v3
 
-    - name: Dar permissão de execução para o Gradle
-      run: chmod +x gradlew
+    - name: Garantir Permissões do Compilador
+      run: |
+        chmod +x gradlew
+        mkdir -p "$ANDROID_HOME/licenses" || true
+        echo "24a335a4f57f80877430e4ae15220d914f646721" > "$ANDROID_HOME/licenses/android-sdk-license" || true
 
-    - name: Compilar APK Nativo (Modo Debug com AdMob)
-      run: ./gradlew assembleDebug
+    - name: Compilar APK Nativo (Limpeza de Cache e Build)
+      run: ./gradlew clean assembleDebug
 
     - name: Disponibilizar APK do Lorenzo para Download
       uses: actions/upload-artifact@v4
