@@ -62,6 +62,9 @@ public class JSInterfacePlugin implements PluginInterface {
 
         // Add JavaScript interface
         webView.addJavascriptInterface(new JSBridgeInterface(), "JSBridge");
+        
+        // ADICIONA A PONTE COMPATÍVEL ESPERADA PELO APP.TSX DO JOGO LORENZO
+        webView.addJavascriptInterface(new JSBridgeInterface(), "AndroidInterface");
 
         Log.d(TAG, "JSInterfacePlugin initialized with config: " + config);
     }
@@ -133,6 +136,50 @@ public class JSInterfacePlugin implements PluginInterface {
 
     public class JSBridgeInterface {
 
+        // =========================================================================
+        // MÉTODOS DE MONETIZAÇÃO ADMOB (PONTES INTEGRADAS CONFORME PEDIDO)
+        // =========================================================================
+
+        @JavascriptInterface
+        public void mostrarIntersticial() {
+            Log.d(TAG, "Chamado nativo recebido: mostrarIntersticial do AdMob");
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        AdMobPlugin adMobPlugin = (AdMobPlugin) SWVContext.getPluginManager().getPluginInstance("AdMobPlugin");
+                        if (adMobPlugin != null) {
+                            adMobPlugin.showInterstitial();
+                        } else {
+                            Log.w(TAG, "AdMobPlugin não está ativo no SmartWebView.");
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Erro ao disparar anúncio intersticial nativo", e);
+                    }
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void mostrarVideoPremiado() {
+            Log.d(TAG, "Chamado nativo recebido: mostrarVideoPremiado do AdMob");
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        AdMobPlugin adMobPlugin = (AdMobPlugin) SWVContext.getPluginManager().getPluginInstance("AdMobPlugin");
+                        if (adMobPlugin != null) {
+                            adMobPlugin.showRewarded();
+                        } else {
+                            Log.w(TAG, "AdMobPlugin não está ativo no SmartWebView.");
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Erro ao disparar anúncio recompensado nativo", e);
+                    }
+                }
+            });
+        }
+
         @JavascriptInterface
         public String getDeviceInfo() {
             try {
@@ -151,7 +198,6 @@ public class JSInterfacePlugin implements PluginInterface {
         @JavascriptInterface
         public String getAppInfo() {
             try {
-                // Get version name dynamically using the plugin's activity context
                 String versionName = "";
                 try {
                     versionName = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName;
@@ -160,7 +206,7 @@ public class JSInterfacePlugin implements PluginInterface {
                 }
 
                 JSONObject info = new JSONObject();
-                info.put("version", versionName); // Use the dynamically fetched version
+                info.put("version", versionName);
                 info.put("homepage", SWVContext.ASWV_URL);
                 return info.toString();
 
@@ -172,7 +218,6 @@ public class JSInterfacePlugin implements PluginInterface {
 
         @JavascriptInterface
         public void showToast(String message) {
-            // Bridge to ToastPlugin if enabled
             if (Boolean.TRUE.equals(config.getOrDefault("enablePluginAccess", true))) {
                 try {
                     ToastPlugin toastPlugin = (ToastPlugin) SWVContext.getPluginManager().getPluginInstance("ToastPlugin");
