@@ -1,46 +1,54 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Smart WebView</string>
-	<string name="app_desc">A simple use webview integrated w/ native features to help build advanced hybrid applications.</string>
-    <string name="image_view">Image View</string>
-	<string name="loading">Loading</string>
-	<string name="loading2" tools:ignore="TypographyEllipsis">Loading...</string>
-	<string name="mgks_promo">github.com/mgks</string>
-	<string name="loc_fail">Failed to Find Location</string>
-    <string name="loc_fail_text">Please Check Your GPS Location.</string>
-    <string name="loc_fail_more">Please check if your GPS is enabled, if not, please set it on high accuracy from location settings.</string>
-    <string name="loc_perm">Allow Permission for Location</string>
-    <string name="loc_perm_text">Give this app permission to check your location.</string>
-    <string name="loc_perm_more">Please allow this app to know your location for better overall experience.</string>
-	<string name="dl_downloading" tools:ignore="TypographyEllipsis">Downloading file...</string>
-	<string name="dl_downloading2">Downloading File</string>
-	<string name="fl_chooser">File Chooser</string>
-	<string name="went_wrong">Something Went Wrong!</string>
-	<string name="check_connection">Please check your Network Connection!</string>
-	<string name="share_w_friends">Share with your Friends</string>
-	<string name="notification_channel_name">Important Alerts</string>
-	<string name="notification_channel_desc">Get latest and important alerts.</string>
-	<string name="search">Search</string>
-	<string name="exit">Exit</string>
-	<string name="open">Open</string>
-	<string name="close">Close</string>
-	<string name="search_hint">Enter your query here</string>
-	<string name="connecting" tools:ignore="TypographyEllipsis">Connecting...</string>
-	<string name="exit_title">Exit confirmation</string>
-	<string name="exit_subtitle">Are you sure you want to exit?</string>
-	<string name="print_complete">Printing complete</string>
-	<string name="print_failed">Printing failed</string>
-	<string name="msg_no_internet">No internet connection!</string>
-	<string name="print_error">Error printing!</string>
-    <string name="loading_app" tools:ignore="TypographyEllipsis">Launching app preview...</string>
-    <string name="authenticate">Authenticate</string>
-    <string name="documentation">Documentation</string>
-	<string name="home">Home</string>
-	<string name="plugins">Plugins</string>
-	<string name="firebase_messaging">Firebase Messaging</string>
-	<string name="gps">GPS</string>
-	<string name="url_handling">URL Handling</string>
-	<string name="changelog">Changelog</string>
-	<string name="need_help">Need Help?</string>
-    <string name="play_store_guide">Play Store Guide</string>
-	<string name="dark_mode">Dark Mode</string>
+    <!-- NOME DO APLICATIVO DO LORENZO NO CELULAR -->
+    <string name="app_name">Lorenzo O Aventureiro</string>
+    <string name="app_desc">Acompanhe Lorenzo em sua jornada épica cheia de desafios e perigos no multiverso.</string>
+    
+    <!-- CONFIGURAÇÕES OFICIAIS DO GOOGLE ADMOB -->
+    <string name="admob_app_id">ca-app-pub-6917222908830790~9513293436</string>
+    <string name="admob_interstitial_id">ca-app-pub-6917222908830790/4674379816</string>
+    <string name="admob_rewarded_id">ca-app-pub-6917222908830790/5380956825</string>
+
+    <!-- STRINGS INTERNAS E MENSAGENS DO MOTOR NATIVO -->
+    <string name="image_view">Visualizar Imagem</string>
+    <string name="loading">Carregando</string>
+    <string name="loading2" tools:ignore="TypographyEllipsis">Carregando...</string>
+    <string name="mgks_promo">github.com/mgks</string>
+    <string name="loc_fail">Falha ao Encontrar Localização</string>
+    <string name="loc_fail_text">Por favor, verifique o GPS do seu dispositivo.</string>
+    <string name="loc_fail_more">Certifique-se de que o GPS está ativo e configurado no modo de alta precisão.</string>
+    <string name="loc_perm">Permitir Acesso à Localização</string>
+    <string name="loc_perm_text">Dê permissão ao aplicativo para verificar sua localização.</string>
+    <string name="loc_perm_more">Permita o acesso à localização para obter uma melhor experiência geral.</string>
+    <string name="dl_downloading" tools:ignore="TypographyEllipsis">Baixando arquivo...</string>
+    <string name="dl_downloading2">Baixando Arquivo</string>
+    <string name="fl_chooser">Selecionar Arquivo</string>
+    <string name="went_wrong">Algo Deu Errado!</string>
+    <string name="check_connection">Por favor, verifique sua conexão com a rede!</string>
+    <string name="share_w_friends">Compartilhar com Amigos</string>
+    <string name="notification_channel_name">Alertas Importantes</string>
+    <string name="notification_channel_desc">Receba os alertas mais recentes sobre o jogo.</string>
+    <string name="search">Buscar</string>
+    <string name="exit">Sair</string>
+    <string name="open">Abrir</string>
+    <string name="close">Fechar</string>
+    <string name="search_hint">Digite sua busca aqui</string>
+    <string name="connecting" tools:ignore="TypographyEllipsis">Conectando...</string>
+    <string name="exit_title">Confirmar Saída</string>
+    <string name="exit_subtitle">Tem certeza que deseja fechar o jogo?</string>
+    <string name="print_complete">Impressão concluída</string>
+    <string name="print_failed">Falha na impressão</string>
+    <string name="msg_no_internet">Sem conexão com a internet!</string>
+    <string name="print_error">Erro ao imprimir!</string>
+    <string name="loading_app" tools:ignore="TypographyEllipsis">Iniciando jogo...</string>
+    <string name="authenticate">Autenticar</string>
+    <string name="documentation">Documentação</string>
+    <string name="home">Início</string>
+    <string name="plugins">Plugins</string>
+    <string name="firebase_messaging">Firebase Messaging</string>
+    <string name="gps">GPS</string>
+    <string name="url_handling">Gerenciamento de URL</string>
+    <string name="changelog">Notas de Atualização</string>
+    <string name="need_help">Precisa de Ajuda?</string>
+    <string name="play_store_guide">Guia da Play Store</string>
+    <string name="dark_mode">Modo Escuro</string>
 </resources>
