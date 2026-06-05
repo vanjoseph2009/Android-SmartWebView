@@ -33,32 +33,32 @@ def getSwvProperties() {
 def swvProps = getSwvProperties()
 
 android {
-	namespace swvProps.getProperty('build.application.id', 'mgks.os.swv')
-	compileSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
+	namespace = swvProps.getProperty('build.application.id', 'mgks.os.swv')
+	compileSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
 
 	defaultConfig {
-		applicationId swvProps.getProperty('build.application.id', 'mgks.os.swv')
-		minSdk swvProps.getProperty('build.sdk.min', '24').toInteger()
-		targetSdk swvProps.getProperty('build.sdk.compile', '36').toInteger()
-		versionCode swvProps.getProperty('build.version.code', '1').toInteger()
-		versionName swvProps.getProperty('build.version.name', '1.0')
-		multiDexEnabled true // enable if method count exceeds 64K
+		applicationId = swvProps.getProperty('build.application.id', 'mgks.os.swv')
+		minSdk = swvProps.getProperty('build.sdk.min', '24').toInteger()
+		targetSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
+		versionCode = swvProps.getProperty('build.version.code', '1').toInteger()
+		versionName = swvProps.getProperty('build.version.name', '1.0')
+		multiDexEnabled = true // enable if method count exceeds 64K
 	}
 
 	buildTypes {
 		release {
-			minifyEnabled false // consider enabling for production
+			minifyEnabled = false // consider enabling for production
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
 
 	buildFeatures {
-		buildConfig true
+		buildConfig = true
 	}
 
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_17
-		targetCompatibility JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 
 	// Optional: If you need to configure flavors
