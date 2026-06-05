@@ -329,7 +329,13 @@ public class AdMobPlugin implements PluginInterface {
                 JSONObject rewardData = new JSONObject();
                 rewardData.put("amount", rewardItem.getAmount());
                 rewardData.put("type", rewardItem.getType());
+                
+                // 1. Mantém o aviso original do Smart WebView por segurança
                 evaluateJavascript("if (window.AdMob && window.AdMob.onUserEarnedReward) window.AdMob.onUserEarnedReward(" + rewardData.toString() + ");");
+                
+                // 2. DISPARA O AVISO DIRETO PARA O SEU APP.TSX (MECÂNICA DA LOJA)
+                evaluateJavascript("if (typeof window.adMobVideoPremiadoConcluido === 'function') { window.adMobVideoPremiadoConcluido(); }");
+                
             } catch (JSONException e) {
                 Log.e(TAG, "Error creating reward JSON", e);
             }
@@ -350,12 +356,20 @@ public class AdMobPlugin implements PluginInterface {
         @JavascriptInterface
         public void showBannerAd() {
             mainHandler.post(() -> {
-                ViewGroup adContainer = activity.findViewById(R.id.msw_ad_container);
-                if (adContainer != null) {
-                    AdMobPlugin.this.showBannerAd(adContainer);
-                } else {
-                    Log.e(TAG, "Ad container with ID 'msw_ad_container' not found in layout! Cannot show banner ad.");
+                // Correção dinâmica para suportar múltiplos IDs de container comuns do SmartWebView
+                int containerId = activity.getResources().getIdentifier("msw_ad_container", "id", activity.getPackageName());
+                if (containerId == 0) {
+                    containerId = activity.getResources().getIdentifier("swv_ad_container", "id", activity.getPackageName());
                 }
+                
+                if (containerId != 0) {
+                    ViewGroup adContainer = activity.findViewById(containerId);
+                    if (adContainer != null) {
+                        AdMobPlugin.this.showBannerAd(adContainer);
+                        return;
+                    }
+                }
+                Log.e(TAG, "Ad container (msw_ad_container/swv_ad_container) not found in layout! Cannot show banner ad.");
             });
         }
 
