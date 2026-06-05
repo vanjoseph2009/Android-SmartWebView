@@ -2,8 +2,8 @@ name: Build Smart WebView v8 APK
 
 on:
   push:
-    branches: [ master, main ] # Roda automaticamente se você salvar algo na branch master ou main
-  workflow_dispatch: # Ativa o botão cinza para rodar manualmente sempre que precisar
+    branches: [ master, main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: '17' # Versão ideal e estável para compilar o Smart WebView v8
+        java-version: '17'
 
     - name: Configurar Android SDK ferramentas de compilação
       uses: android-actions/setup-android@v3
