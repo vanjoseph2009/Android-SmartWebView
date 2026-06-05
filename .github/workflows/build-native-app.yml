@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Força o ambiente global a rodar no Node 24 limpo
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -30,6 +30,14 @@ jobs:
         chmod +x gradlew
         mkdir -p "$ANDROID_HOME/licenses" || true
         echo "24a335a4f57f80877430e4ae15220d914f646721" > "$ANDROID_HOME/licenses/android-sdk-license" || true
+
+    - name: Correção Automática de Sintaxe Gradle e Recursos Duplicados
+      run: |
+        # 1. Corrige o erro de namespace removendo a tag antiga package do Manifesto
+        sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
+
+        # 2. Deleta o arquivo ads.xml antigo para evitar a duplicação de IDs do AdMob com o strings.xml
+        rm -f app/src/main/res/values/ads.xml || true
 
     - name: Compilar APK Nativo (Limpeza de Cache e Build)
       run: ./gradlew clean assembleDebug
