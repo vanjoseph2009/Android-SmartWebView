@@ -31,16 +31,18 @@ jobs:
         mkdir -p "$ANDROID_HOME/licenses" || true
         echo "24a335a4f57f80877430e4ae15220d914f646721" > "$ANDROID_HOME/licenses/android-sdk-license" || true
 
-    - name: Correção de Namespace, Importações Java e Recursos Duplicados
+    - name: Correção de Arquitetura de Namespace e Recursos Duplicados
       run: |
-        # 1. Corrige o erro de namespace removendo a tag antiga do Manifesto
+        # 1. Corrige o Manifesto removendo a tag antiga package para evitar conflitos nativos
         sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
 
-        # 2. Deleta o arquivo ads.xml antigo para evitar a duplicação de IDs com o strings.xml
+        # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
 
-        # 3. CORREÇÃO DOS COMPONENTES (CRUCIAL): Atualiza a importação da classe R em todos os arquivos Java para o novo pacote
-        find app/src/main/java/ -name "*.java" -exec sed -i 's/import mgks.os.swv.R;/import com.lorenzo.aventureiro.R;/g' {} +
+        # 3. AJUSTE UNIFICADO DE NAMESPACE (CORREÇÃO DO ERRO R): 
+        # Mantém a estrutura de código original do motor Java viva, alterando apenas a saída do APK final
+        sed -i 's/namespace "mgks.os.swv"/namespace "mgks.os.swv"/g' app/build.gradle
+        sed -i 's/applicationId "mgks.os.swv"/applicationId "com.lorenzo.aventureiro"/g' app/build.gradle
 
     - name: Compilar APK Nativo (Limpeza de Cache e Build)
       run: ./gradlew clean assembleDebug
