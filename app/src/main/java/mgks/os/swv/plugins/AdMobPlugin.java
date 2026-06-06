@@ -316,7 +316,7 @@ public class AdMobPlugin implements PluginInterface {
         });
     }
 
-    public boolean showRewardedAd() {
+        public boolean showRewardedAd() {
         if (rewardedAd == null || activity == null) {
             Log.w(TAG, "Rewarded ad not loaded yet.");
             if (!isRewardedLoading.get()) loadRewardedAd();
@@ -350,6 +350,15 @@ public class AdMobPlugin implements PluginInterface {
 
     public boolean isRewardedAdReady() {
         return rewardedAd != null;
+    }
+
+    // Métodos adicionais para corrigir o erro de compilação do JSInterfacePlugin
+    public boolean showInterstitial() {
+        return showInterstitialAd();
+    }
+
+    public boolean showRewarded() {
+        return showRewardedAd();
     }
 
     public class AdMobJSInterface {
