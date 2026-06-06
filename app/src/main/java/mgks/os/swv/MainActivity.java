@@ -125,36 +125,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SWVContext.getPluginManager().onActivityResult(requestCode, resultCode, intent);
     }
 
-            @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+                @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 1. FORÇAR A URL CORRETA DO JOGO DIRETO NO MOTOR JAVA
         mgks.os.swv.SWVContext.ASWV_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
         mgks.os.swv.SWVContext.ASWV_APP_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
 
-        // 2. MODO IMERSIVO MODERNO E SEGURO (EVITA QUE O APP FECHE SOZINHO)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
-            android.view.WindowInsetsController controller = getWindow().getInsetsController();
-            if (controller != null) {
-                controller.hide(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
-                controller.setSystemBarsBehavior(android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        // 2. MODO IMERSIVO EXECUTADO APÓS A ATIVIDADE CARREGAR (EVITA ERROS DE QUEDA)
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                    getWindow().setDecorFitsSystemWindows(false);
+                    android.view.WindowInsetsController controller = getWindow().getInsetsController();
+                    if (controller != null) {
+                        controller.hide(android.view.WindowInsets.Type.statusBars() | android.view.WindowInsets.Type.navigationBars());
+                        controller.setSystemBarsBehavior(android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                    }
+                } else {
+                    getWindow().getDecorView().setSystemUiVisibility(
+                        android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    );
+                }
             }
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            );
-        }
+        });
 
         // Secure the app on startup if biometric or auth is forced on launch
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
 
       
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
