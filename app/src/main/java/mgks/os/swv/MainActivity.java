@@ -125,13 +125,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SWVContext.getPluginManager().onActivityResult(requestCode, resultCode, intent);
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+        @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 1. FORÇAR A URL CORRETA DO JOGO DIRETO NO MOTOR JAVA
+        mgks.os.swv.SWVContext.ASWV_URL = "https://lorenzo-o-aventureiro-game.vercel.app/";
+        mgks.os.swv.SWVContext.ASWV_APP_URL = "https://lorenzo-o-aventureiro-game.vercel.app/";
+
+        // 2. FORÇAR ECRÃ INTEIRO REAL (OCULTA BARRAS SUPERIORES E LATERAIS)
+        getWindow().getDecorView().setSystemUiVisibility(
+            android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+            android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+            android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
+            android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
+
         // Secure the app on startup if biometric or auth is forced on launch
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
       
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
