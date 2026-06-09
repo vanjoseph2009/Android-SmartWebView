@@ -1,4 +1,4 @@
-name: Build Smart WebView v8 AAB Assinado Automático
+name: Build Smart WebView v8 AAB Assinado VJGames
 
 on:
   push:
@@ -30,10 +30,17 @@ jobs:
 
     - name: Correção de Arquitetura de Namespace e Recursos Duplicados
       run: |
+        # 1. Corrige o Manifesto removendo a tag antiga package para evitar conflitos nativos
         sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
+
+        # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
+
+        # 3. RESOLUÇÃO DO ERRO DA CLASSE R E CORREÇÃO DO NOME DO PACOTE OFICIAL PARA GOOGLE PLAY:
+        # Força o Gradle a usar o namespace original para compilar as classes Java perfeitamente,
+        # mas altera o ID de saída do aplicativo para com.vjgames.lorenzooaventureiro.
         sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
-        sed -i 's/applicationId .*/applicationId "com.lorenzo.aventureiro"/g' app/build.gradle
+        sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle
 
     - name: Compilar AAB Nativo para Play Store
       run: ./gradlew clean bundleRelease
@@ -49,5 +56,5 @@ jobs:
     - name: Disponibilizar AAB Assinado para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-SmartWebView-AAB-Final
+        name: Lorenzo-VJGames-AAB-Final
         path: app/build/outputs/bundle/release/app-release.aab
