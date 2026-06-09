@@ -1,4 +1,4 @@
-name: Build Smart WebView v8 APK
+name: Build Smart WebView v8 AAB
 
 on:
   push:
@@ -45,11 +45,11 @@ jobs:
         sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
         sed -i 's/applicationId .*/applicationId "com.lorenzo.aventureiro"/g' app/build.gradle
 
-    - name: Compilar APK Nativo (Limpeza de Cache e Build)
-      run: ./gradlew clean assembleDebug
+    - name: Compilar AAB Nativo para Play Store
+      run: ./gradlew clean bundleRelease
 
-    - name: Disponibilizar APK do Lorenzo para Download
+    - name: Disponibilizar AAB do Lorenzo para Download
       uses: actions/upload-artifact@v4
       with:
-        name: Lorenzo-SmartWebView-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        name: Lorenzo-SmartWebView-AAB
+        path: app/build/outputs/bundle/release/
