@@ -30,26 +30,23 @@ jobs:
 
     - name: Correção de Arquitetura de Namespace e Recursos Duplicados
       run: |
+        # 1. Corrige o Manifesto removendo a tag antiga package para evitar conflitos nativos
         sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
+
+        # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
+
+        # 3. RESOLUÇÃO DO ERRO DA CLASSE R: 
+        # Força o Gradle a usar o namespace original para compilar as classes Java perfeitamente,
+        # mas altera o ID de saída do aplicativo para o seu ID oficial do Lorenzo.
         sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
         sed -i 's/applicationId .*/applicationId "com.lorenzo.aventureiro"/g' app/build.gradle
 
     - name: Compilar AAB Nativo para Play Store
       run: ./gradlew clean bundleRelease
 
-    - name: Assinar o Arquivo AAB Automaticamente
-      uses: r0adkll/sign-android-release@v1
-      id: sign_app
-      with:
-        releaseDirectory: app/build/outputs/bundle/release
-        signingKeyBase64: ""
-        alias: "vjgames"
-        keyStorePassword: "vjgamespassword"
-        keyPassword: "vjgamespassword"
-
-    - name: Disponibilizar AAB Assinado para Download
+    - name: Disponibilizar AAB do Lorenzo para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-SmartWebView-AAB-Assinado
-        path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+        name: Lorenzo-SmartWebView-AAB-Pronto
+        path: app/build/outputs/bundle/release/app-release.aab
