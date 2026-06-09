@@ -1,4 +1,4 @@
-name: Build Smart WebView v8 AAB Autossinado
+name: Build Smart WebView v8 AAB Assinado Automático
 
 on:
   push:
@@ -30,23 +30,24 @@ jobs:
 
     - name: Correção de Arquitetura de Namespace e Recursos Duplicados
       run: |
-        # 1. Corrige o Manifesto removendo a tag antiga package para evitar conflitos nativos
         sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
-
-        # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
-
-        # 3. RESOLUÇÃO DO ERRO DA CLASSE R: 
-        # Força o Gradle a usar o namespace original para compilar as classes Java perfeitamente,
-        # mas altera o ID de saída do aplicativo para o seu ID oficial do Lorenzo.
         sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
         sed -i 's/applicationId .*/applicationId "com.lorenzo.aventureiro"/g' app/build.gradle
 
     - name: Compilar AAB Nativo para Play Store
       run: ./gradlew clean bundleRelease
 
-    - name: Disponibilizar AAB do Lorenzo para Download
+    - name: Gerar Keystore Temporária e Assinar AAB Oficialmente
+      run: |
+        # 1. Cria uma chave de segurança digital válida em tempo de execução
+        keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, OU=Development, O=VJ Games, L=Sao Paulo, S=SP, C=BR"
+        
+        # 2. Assina o ficheiro AAB gerado com a chave criada usando o jarsigner oficial do JDK
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA256 -keystore temporaria.keystore -storepass lorenzopass -keypass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
+
+    - name: Disponibilizar AAB Assinado para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-SmartWebView-AAB-Pronto
+        name: Lorenzo-SmartWebView-AAB-Final
         path: app/build/outputs/bundle/release/app-release.aab
