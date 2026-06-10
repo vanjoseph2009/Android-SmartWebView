@@ -1,25 +1,5 @@
 package mgks.os.swv.plugins;
 
-/*
-  AdMob Plugin for Smart WebView
-
-  This premium plugin enables easy integration of Google AdMob ads into your Smart WebView app.
-  It handles banner ads, interstitial ads, and rewarded ads with minimal configuration.
-
-  FEATURES:
-  - Banner ads with customizable sizes
-  - Interstitial ads for natural transition points
-  - Rewarded ads for user incentives
-  - JavaScript interface for triggering ads from web content
-  - Event callbacks for ad loading, showing, and closing
-  - Test mode for development
-
-  USAGE:
-  1. Configure your AdMob app ID in the Android manifest
-  2. Add the ad container to your layout
-  3. Use this plugin to show ads with just a few lines of code
-*/
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
@@ -56,6 +36,7 @@ import mgks.os.swv.Functions;
 import mgks.os.swv.PluginInterface;
 import mgks.os.swv.PluginManager;
 import mgks.os.swv.R;
+import mgks.os.swv.SWVContext;
 
 public class AdMobPlugin implements PluginInterface {
     private static final String TAG = "AdMobPlugin";
@@ -64,33 +45,25 @@ public class AdMobPlugin implements PluginInterface {
     private Map<String, Object> config;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    // Ad units
     private String bannerAdUnitId;
     private String interstitialAdUnitId;
     private String rewardedAdUnitId;
 
-    // Ad instances
     private AdView bannerAd;
     private InterstitialAd interstitialAd;
     private RewardedAd rewardedAd;
 
-    // Flags
     private boolean isInitialized = false;
     private final AtomicBoolean isInterstitialLoading = new AtomicBoolean(false);
     private final AtomicBoolean isRewardedLoading = new AtomicBoolean(false);
 
-    // Static initializer block for self-registration
     static {
         Map<String, Object> config = new HashMap<>();
-
-        // Default configuration
-        config.put("testMode", true);  // Use test ads for development
-        config.put("bannerAdUnitId", "ca-app-pub-3940256099942544/6300978111");  // Test Banner Ad Unit ID
-        config.put("interstitialAdUnitId", "ca-app-pub-3940256099942544/1033173712");  // Test Interstitial Ad Unit ID
-        config.put("rewardedAdUnitId", "ca-app-pub-3940256099942544/5224354917");  // Test Rewarded Ad Unit ID
-        config.put("enableJsInterface", true);  // Enable JavaScript interface for calling from web
-        config.put("autoLoadInterstitial", true);  // Auto-load interstitial after showing
-        config.put("autoLoadRewarded", true);  // Auto-load rewarded after showing
+        // MUDANÇA 1: Desativa o testMode nativo para aceitar chaves reais de produção
+        config.put("testMode", false);  
+        config.put("enableJsInterface", true);  
+        config.put("autoLoadInterstitial", true);  
+        config.put("autoLoadRewarded", true);  
 
         PluginManager.registerPlugin(new AdMobPlugin(), config);
     }
@@ -101,101 +74,158 @@ public class AdMobPlugin implements PluginInterface {
         this.webView = webView;
         this.config = config;
 
-        // Get configuration - safely handle possible null values
-        bannerAdUnitId = (String) config.getOrDefault("bannerAdUnitId", "ca-app-pub-3940256099942544/6300978111");
-        interstitialAdUnitId = (String) config.getOrDefault("interstitialAdUnitId", "ca-app-pub-3940256099942544/1033173712");
-        rewardedAdUnitId = (String) config.getOrDefault("rewardedAdUnitId", "ca-app-pub-3940256099942544/5224354917");
+        // MUDANÇA 2: Força o plugin a ler as chaves reais diretamente do seu strings.xml
+        try {
+            interstitialAdUnitId = activity.getString(R.string.admob_interstitial_id);
+            rewardedAdUnitId = activity.getString(R.string.admob_rewarded_id);
+            Log.d(TAG, "IDs reais carregados com sucesso do strings.xml");
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao buscar strings nativas de ID, usando fallbacks de teste", e);
+            interstitialAdUnitId = "ca-app-pub-3940256099942544/1033173712";
+            rewardedAdUnitId = "ca-app-pub-3940256099942544/5224354917";
+        }
 
-        // Initialize MobileAds
         MobileAds.initialize(activity, this::onMobileAdsInitialized);
 
-        // Add JavaScript interface if enabled
         if (Boolean.TRUE.equals(config.getOrDefault("enableJsInterface", true))) {
             webView.addJavascriptInterface(new AdMobJSInterface(), "AdMobInterface");
         }
-
-        Log.d(TAG, "AdMobPlugin initialized with config: " + config);
     }
 
     private void onMobileAdsInitialized(InitializationStatus initializationStatus) {
         isInitialized = true;
-        Log.d(TAG, "Mobile Ads initialization complete: " + initializationStatus);
-
-        // Preload ads
         loadInterstitialAd();
         loadRewardedAd();
     }
 
-    @Override
-    public String getPluginName() {
-        return "AdMobPlugin";
+    // =========================================================================
+    // CARREGAMENTO E EXIBIÇÃO DE ANÚNCIOS (INTERSTITIAL / REWARDED)
+    // =========================================================================
+
+    public void loadInterstitialAd() {
+        if (!isInitialized || isInterstitialLoading.get() || interstitialAdUnitId == null) return;
+        isInterstitialLoading.set(true);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(activity, interstitialAdUnitId, adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd ad) {
+                interstitialAd = ad;
+                isInterstitialLoading.set(false);
+                Log.d(TAG, "Anúncio Intersticial carregado com sucesso.");
+            }
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                interstitialAd = null;
+                isInterstitialLoading.set(false);
+                Log.e(TAG, "Falha ao carregar Intersticial: " + error.getMessage());
+            }
+        });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {}
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {}
-
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        return false;
-    }
-
-    @Override
-    public void onPageStarted(String url) {}
-
-    @Override
-    public void onPageFinished(String url) {
-        // Inject Ad-related JavaScript if JS interface is enabled
-        if (Boolean.TRUE.equals(config.getOrDefault("enableJsInterface", true))) {
-            injectAdSupportJs();
+    public void showInterstitial() {
+        if (interstitialAd != null) {
+            interstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    interstitialAd = null;
+                    loadInterstitialAd(); // Recarrega para a próxima vez
+                }
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError error) {
+                    interstitialAd = null;
+                }
+            });
+            interstitialAd.show(activity);
+        } else {
+            Log.w(TAG, "Intersticial ainda não está pronto. Tentando carregar...");
+            loadInterstitialAd();
         }
     }
+
+    public void loadRewardedAd() {
+        if (!isInitialized || isRewardedLoading.get() || rewardedAdUnitId == null) return;
+        isRewardedLoading.set(true);
+
+        AdRequest adRequest = new AdRequest.Builder().build();
+        RewardedAd.load(activity, rewardedAdUnitId, adRequest, new RewardedAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull RewardedAd ad) {
+                rewardedAd = ad;
+                isRewardedLoading.set(false);
+                Log.d(TAG, "Anúncio Premiado carregado com sucesso.");
+            }
+            @Override
+            public void onAdFailedToLoad(@NonNull LoadAdError error) {
+                rewardedAd = null;
+                isRewardedLoading.set(false);
+                Log.e(TAG, "Falha ao carregar Premiado: " + error.getMessage());
+            }
+        });
+    }
+
+    public void showRewarded() {
+        if (rewardedAd != null) {
+            rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    rewardedAd = null;
+                    loadRewardedAd();
+                }
+                @Override
+                public void onAdFailedToShowFullScreenContent(@NonNull AdError error) {
+                    rewardedAd = null;
+                }
+            });
+
+            rewardedAd.show(activity, new OnUserEarnedRewardListener() {
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                    Log.d(TAG, "Utilizador assistiu ao vídeo! Disparando recompensa para o React...");
+                    // MUDANÇA 3: EXECUTA A FUNÇÃO DO SEU INDEX.HTML LOGO APÓS O VÍDEO CONCLUIR
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            evaluateJavascript("if(typeof adMobVideoPremiadoConcluido === 'function') { adMobVideoPremiadoConcluido(); }");
+                        }
+                    });
+                }
+            });
+        } else {
+            Log.w(TAG, "Anúncio Premiado não está pronto. Carregando...");
+            loadRewardedAd();
+        }
+    }
+
+    @Override public String getPluginName() { return "AdMobPlugin"; }
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {}
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {}
+    @Override public boolean shouldOverrideUrlLoading(WebView view, String url) { return false; }
+    @Override public void onPageStarted(String url) {}
+    @Override public void onPageFinished(String url) { if (Boolean.TRUE.equals(config.getOrDefault("enableJsInterface", true))) injectAdSupportJs(); }
 
     private void injectAdSupportJs() {
         String adSupportJs =
                 "if (!window.AdMob) {\n" +
                         "    window.AdMob = {\n" +
-                        "        showBanner: function() { if(window.AdMobInterface) return window.AdMobInterface.showBannerAd(); },\n" +
-                        "        hideBanner: function() { if(window.AdMobInterface) return window.AdMobInterface.hideBannerAd(); },\n" +
                         "        showInterstitial: function() { if(window.AdMobInterface) return window.AdMobInterface.showInterstitialAd(); },\n" +
-                        "        showRewarded: function() { if(window.AdMobInterface) return window.AdMobInterface.showRewardedAd(); },\n" +
-                        "        isInterstitialReady: function() { if(window.AdMobInterface) return window.AdMobInterface.isInterstitialAdReady(); },\n" +
-                        "        isRewardedReady: function() { if(window.AdMobInterface) return window.AdMobInterface.isRewardedAdReady(); }\n" +
+                        "        showRewarded: function() { if(window.AdMobInterface) return window.AdMobInterface.showRewardedAd(); }\n" +
                         "    };\n" +
-                        "    console.log('AdMob JavaScript interface initialized');\n" +
                         "}\n";
-
         evaluateJavascript(adSupportJs);
     }
 
     @Override public void onResume() {}
-
     @Override public void onPause() {}
+    @Override public void onDestroy() { bannerAd = null; interstitialAd = null; rewardedAd = null; }
+    @Override public void evaluateJavascript(String script) { if (webView != null) webView.evaluateJavascript(script, null); }
 
-    @Override
-    public void onDestroy() {
-        if (bannerAd != null) {
-            bannerAd.destroy();
-            bannerAd = null;
-        }
-        interstitialAd = null;
-        rewardedAd = null;
+    // Interface interna para pontes JavaScript diretas do SmartWebView
+    public class AdMobJSInterface {
+        @JavascriptInterface public void showInterstitialAd() { activity.runOnUiThread(() -> showInterstitial()); }
+        @JavascriptInterface public void showRewardedAd() { activity.runOnUiThread(() -> showRewarded()); }
     }
-
-    @Override
-    public void evaluateJavascript(String script) {
-        if (webView != null) {
-            webView.evaluateJavascript(script, null);
-        }
-    }
-
-    public void showBannerAd(ViewGroup adContainer) {
-        if (!isInitialized || activity == null) {
-            Log.w(TAG, "AdMob not ready or activity is null.");
-            return;
-        }
+}
 
         mainHandler.post(() -> {
             if (bannerAd != null) {
