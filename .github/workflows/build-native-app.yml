@@ -1,4 +1,4 @@
-name: Build Smart WebView v8 AAB Assinado VJGames
+name: Build Smart WebView v8 APK Assinado VJGames
 
 on:
   push:
@@ -36,25 +36,29 @@ jobs:
         # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
 
-        # 3. RESOLUÇÃO DO ERRO DA CLASSE R E CORREÇÃO DO NOME DO PACOTE OFICIAL PARA GOOGLE PLAY:
-        # Força o Gradle a usar o namespace original para compilar as classes Java perfeitamente,
-        # mas altera o ID de saída do aplicativo para com.vjgames.lorenzooaventureiro.
+        # 3. RESOLUÇÃO DO ERRO DA CLASSE R E CORREÇÃO DO NOME DO PACOTE OFICIAL:
         sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
         sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle
 
-    - name: Compilar AAB Nativo para Play Store
-      run: ./gradlew clean bundleRelease
+    - name: Compilar APK Nativo (assembleRelease)
+      run: ./gradlew clean assembleRelease
 
-    - name: Gerar Keystore Temporária e Assinar AAB Oficialmente
+    - name: Gerar Keystore Temporária, Alinhar e Assinar APK Oficialmente
       run: |
         # 1. Cria uma chave de segurança digital válida em tempo de execução
         keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, OU=Development, O=VJ Games, L=Sao Paulo, S=SP, C=BR"
         
-        # 2. Assina o ficheiro AAB gerado com a chave criada usando o jarsigner oficial do JDK
-        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA256 -keystore temporaria.keystore -storepass lorenzopass -keypass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
+        # 2. Localiza as ferramentas de Build do Android SDK para usar o zipalign e apksigner
+        BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
+        
+        # 3. Alinha o APK para otimização de memória (obrigatório antes de assinar com apksigner)
+        $BUILD_TOOLS_DIR/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-lorenzo-alinhado.apk
 
-    - name: Disponibilizar AAB Assinado para Download
+        # 4. Assina o APK utilizando o apksigner oficial (Gera assinaturas V1, V2 e V3 compatíveis com todas as versões do Android)
+        $BUILD_TOOLS_DIR/apksigner sign --ks temporaria.keystore --ks-pass pass:lorenzopass --key-pass pass:lorenzopass --out app/build/outputs/apk/release/Lorenzo_O_Aventureiro_Assinado.apk app/build/outputs/apk/release/app-lorenzo-alinhado.apk
+
+    - name: Disponibilizar APK Assinado para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-VJGames-AAB-Final
-        path: app/build/outputs/bundle/release/app-release.aab
+        name: Lorenzo-VJGames-APK-Final
+        path: app/build/outputs/apk/release/Lorenzo_O_Aventureiro_Assinado.apk
