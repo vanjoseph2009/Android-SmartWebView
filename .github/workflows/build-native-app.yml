@@ -38,22 +38,20 @@ jobs:
         # 2. Elimina o ficheiro ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
 
-        # 3. Força a configuração limpa do namespace e applicationId no build.gradle
+        # 3. CORREÇÃO DA SINTAXE DO GRADLE (Substituição cirúrgica sem quebrar chavetas)
         if [ -f app/build.gradle ]; then
-          # Remove blocos antigos de namespace/applicationId duplicados para evitar conflitos
-          sed -i '/namespace "/d' app/build.gradle || true
-          sed -i '/applicationId "/d' app/build.gradle || true
-          
-          # Injeta a configuração oficial no topo do bloco android
-          sed -i 's/android {/android {\n    namespace "com.vjgames.lorenzooaventureiro"\n    defaultConfig {\n        applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
+          # Substitui qualquer linha que defina o namespace pelo seu oficial
+          sed -i 's/namespace .*/namespace "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
+          # Substitui qualquer linha que defina o applicationId pelo seu oficial
+          sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
         fi
 
         # 4. RESOLUÇÃO DOS ERROS DE JAVA (CORREÇÃO DE IMPORTS DA CLASSE R EM LOTE)
-        # Este comando varre todos os arquivos .java e corrige as referências do pacote antigo para o novo
+        # Varre os ficheiros .java e corrige as referências do pacote antigo para o novo
         find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv/package com.vjgames.lorenzooaventureiro/g' {} + || true
         find app/src/main/java/ -name "*.java" -exec sed -i 's/import mgks.os.swv.R;/import com.vjgames.lorenzooaventureiro.R;/g' {} + || true
         
-        # Garante que a classe R correta seja importada caso não estivesse explícita no código original
+        # Injeta o import da classe R logo após a declaração do pacote
         find app/src/main/java/ -name "*.java" -exec sed -i '/package com.vjgames.lorenzooaventureiro;/a import com.vjgames.lorenzooaventureiro.R;' {} + || true
 
     - name: Compilar APK Nativo (assembleRelease)
