@@ -1,4 +1,4 @@
-name: Build Smart WebView v8 APK Assinado VJGames
+name: Build Smart WebView v8 AAB Assinado VJGames
 
 on:
   push:
@@ -45,41 +45,35 @@ jobs:
         fi
 
         # 4. RESOLUÇÃO DE IMPORTS CRUZADOS E PACOTES DE PLUGINS
-        # Varre todos os ficheiros .java e corrige o cabeçalho do pacote e referências antigas em lote
         find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv.plugins;/package com.vjgames.lorenzooaventureiro.plugins;/g' {} + || true
         find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv;/package com.vjgames.lorenzooaventureiro;/g' {} + || true
         find app/src/main/java/ -name "*.java" -exec sed -i 's/mgks.os.swv/com.vjgames.lorenzooaventureiro/g' {} + || true
 
         # 5. REESTRUTURAÇÃO FÍSICA DE DIRETÓRIOS EM TEMPO DE EXECUÇÃO
-        # Cria a nova árvore de pastas oficial do seu jogo
         mkdir -p app/src/main/java/com/vjgames/lorenzooaventureiro/plugins
-        
-        # Move com segurança os ficheiros Java da pasta antiga para o novo destino estrutural
         if [ -d app/src/main/java/mgks/os/swv ]; then
           cp -r app/src/main/java/mgks/os/swv/plugins/* app/src/main/java/com/vjgames/lorenzooaventureiro/plugins/ || true
           cp app/src/main/java/mgks/os/swv/*.java app/src/main/java/com/vjgames/lorenzooaventureiro/ || true
           rm -rf app/src/main/java/mgks || true
         fi
 
-    - name: Compilar APK Nativo (assembleRelease)
-      run: ./gradlew clean assembleRelease --no-daemon
+    - name: Compilar App Bundle Nativo (bundleRelease)
+      run: ./gradlew clean bundleRelease --no-daemon
 
-    - name: Gerar Keystore Temporária, Alinhar e Assinar APK Oficialmente
+    - name: Gerar Keystore Temporária e Assinar o AAB Oficialmente
       run: |
         # 1. Cria uma chave de segurança digital válida em tempo de execução
         keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, OU=Development, O=VJ Games, L=Sao Paulo, S=SP, C=BR"
         
-        # 2. Localiza as ferramentas de Build do Android SDK para usar o zipalign e apksigner
-        BUILD_TOOLS_DIR=$(ls -d $ANDROID_HOME/build-tools/* | tail -1)
-        
-        # 3. Alinha o APK para otimização de memória (obrigatório antes de assinar com apksigner)
-        $BUILD_TOOLS_DIR/zipalign -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-lorenzo-alinhado.apk
+        # 2. Localiza as ferramentas de Build do Android SDK para usar o jarsigner (obrigatório para ficheiros .aab)
+        # Nota: O formato AAB não utiliza o zipalign/apksigner diretamente como o APK; utiliza o jarsigner do JDK.
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore temporaria.keystore -storepass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
 
-        # 4. Assina o APK utilizando o apksigner oficial (Gera assinaturas V1, V2 e V3 compatíveis com todas as versões do Android)
-        $BUILD_TOOLS_DIR/apksigner sign --ks temporaria.keystore --ks-pass pass:lorenzopass --key-pass pass:lorenzopass --out app/build/outputs/apk/release/Lorenzo_O_Aventureiro_Assinado.apk app/build/outputs/apk/release/app-lorenzo-alinhado.apk
+        # 3. Renomeia o arquivo para ficar organizado
+        mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
 
-    - name: Disponibilizar APK Assinado para Download
+    - name: Disponibilizar AAB Assinado para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-VJGames-APK-Final
-        path: app/build/outputs/apk/release/Lorenzo_O_Aventureiro_Assinado.apk
+        name: Lorenzo-VJGames-AAB-Final
+        path: app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
