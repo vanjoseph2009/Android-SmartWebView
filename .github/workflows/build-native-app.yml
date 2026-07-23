@@ -51,9 +51,10 @@ jobs:
     - name: Compilar App Bundle Nativo (bundleRelease)
       run: ./gradlew clean bundleRelease --no-daemon
 
-    - name: Gerar Keystore e Assinar o AAB
+    - name: Gerar Keystore e Extrair Certificado PEM Oficial
       run: |
         keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, O=VJ Games, C=BR"
+        keytool -export -rfc -keystore temporaria.keystore -alias lorenzoalias -file certificado_lorenzo.pem -storepass lorenzopass
         jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore temporaria.keystore -storepass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
         mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
 
@@ -62,3 +63,9 @@ jobs:
       with:
         name: Lorenzo-VJGames-AAB-Final
         path: app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
+
+    - name: Disponibilizar Certificado PEM para Download
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: Certificado-Google-PEM
+        path: certificado_lorenzo.pem
