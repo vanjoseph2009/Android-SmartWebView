@@ -30,15 +30,16 @@ jobs:
 
     - name: Correção de Arquitetura de Namespace e Recursos Duplicados
       run: |
-        # 1. Corrige o Manifesto removendo a tag antiga package para evitar conflitos nativos
-        sed -i 's/package="mgks.os.swv"//g' app/src/main/AndroidManifest.xml
+        # 1. Limpa o manifesto de tags de pacotes antigas para evitar conflitos nativos de compilação
+        sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
 
-        # 2. Deleta o arquivo ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
+        # 2. Elimina o ficheiro ads.xml para evitar a duplicação de strings do AdMob com o seu strings.xml
         rm -f app/src/main/res/values/ads.xml || true
 
-        # 3. RESOLUÇÃO DO ERRO DA CLASSE R E CORREÇÃO DO NOME DO PACOTE OFICIAL:
-        sed -i 's/namespace .*/namespace "mgks.os.swv"/g' app/build.gradle
-        sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle
+        # 3. RESOLUÇÃO COMPATÍVEL COM SMART WEBVIEW V8:
+        # Injeta diretamente as propriedades corretas no build.gradle independentemente da formatação original
+        sed -i 's/namespace .*/namespace "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
+        sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
 
     - name: Compilar APK Nativo (assembleRelease)
       run: ./gradlew clean assembleRelease
