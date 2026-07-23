@@ -51,18 +51,14 @@ jobs:
     - name: Compilar App Bundle Nativo (bundleRelease)
       run: ./gradlew clean bundleRelease --no-daemon
 
-    - name: Assinar o Arquivo AAB Automaticamente (Padrão Original)
-      uses: r0adkll/sign-android-release@v1
-      id: sign_app
-      with:
-        releaseDirectory: app/build/outputs/bundle/release
-        signingKeyBase64: "" # Mantido vazio para forçar o uso da chave padrão integrada
-        alias: "vjgames"
-        keyStorePassword: "vjgamespassword"
-        keyPassword: "vjgamespassword"
+    - name: Gerar Keystore e Assinar o AAB
+      run: |
+        keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, O=VJ Games, C=BR"
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore temporaria.keystore -storepass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
+        mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
 
     - name: Disponibilizar AAB do Lorenzo para Download
       uses: actions/upload-artifact@v4.4.3
       with:
         name: Lorenzo-VJGames-AAB-Final
-        path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+        path: app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
