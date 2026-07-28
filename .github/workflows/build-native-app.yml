@@ -1,71 +1,22 @@
-name: Build Smart WebView v8 AAB Assinado VJGames
+name: GERAR CHAVE DEFINITIVA VJ_GAMES
 
 on:
-  push:
-    branches: [ master, main ]
-  workflow_dispatch:
+  workflow_dispatch: # Permite que você clique em um botão para iniciar
 
 jobs:
-  build:
+  criar_chave:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout do Código Nativo
-      uses: actions/checkout@v4.2.2
-
-    - name: Configurar ambiente Java JDK 17
-      uses: actions/setup-java@v5.5.0
-      with:
-        distribution: 'zulu'
-        java-version: '17'
-
-    - name: Configurar Android SDK e Aceitar Licenças
-      uses: android-actions/setup-android@v3.2.1
-
-    - name: Garantir Permissões do Compilador
+    - name: Criar Arquivos de Chave Permanente
       run: |
-        chmod +x gradlew
-        mkdir -p "$ANDROID_HOME/licenses" || true
-        echo "24a335a4f57f80877430e4ae15220d914f646721" > "$ANDROID_HOME/licenses/android-sdk-license" || true
+        keytool -genkey -v -keystore lorenzo_definitivo.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass "VjG4m3s#Lorenzo99!" -keypass "VjG4m3s#Lorenzo99!" -dname "CN=VJ Games, O=VJ Games, C=BR"
+        keytool -export -rfc -keystore lorenzo_definitivo.keystore -alias lorenzoalias -file certificado_lorenzo_definitivo.pem -storepass "VjG4m3s#Lorenzo99!"
+        base64 -i lorenzo_definitivo.keystore -o texto_base64.txt
 
-    - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
-      run: |
-        if [ -f app/src/main/AndroidManifest.xml ]; then
-          sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
-        fi
-        rm -f app/src/main/res/values/ads.xml || true
-        if [ -f app/build.gradle ]; then
-          sed -i 's/namespace .*/namespace "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
-          sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
-        fi
-        find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv.plugins;/package com.vjgames.lorenzooaventureiro.plugins;/g' {} + || true
-        find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv;/package com.vjgames.lorenzooaventureiro;/g' {} + || true
-        find app/src/main/java/ -name "*.java" -exec sed -i 's/mgks.os.swv/com.vjgames.lorenzooaventureiro/g' {} + || true
-        mkdir -p app/src/main/java/com/vjgames/lorenzooaventureiro/plugins
-        if [ -d app/src/main/java/mgks/os/swv ]; then
-          cp -r app/src/main/java/mgks/os/swv/plugins/* app/src/main/java/com/vjgames/lorenzooaventureiro/plugins/ || true
-          cp app/src/main/java/mgks/os/swv/*.java app/src/main/java/com/vjgames/lorenzooaventureiro/ || true
-          rm -rf app/src/main/java/mgks || true
-        fi
-
-    - name: Compilar App Bundle Nativo (bundleRelease)
-      run: ./gradlew clean bundleRelease --no-daemon
-
-    - name: Gerar Keystore e Extrair Certificado PEM Oficial
-      run: |
-        keytool -genkey -v -keystore temporaria.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass lorenzopass -keypass lorenzopass -dname "CN=VJ Games, O=VJ Games, C=BR"
-        keytool -export -rfc -keystore temporaria.keystore -alias lorenzoalias -file certificado_lorenzo.pem -storepass lorenzopass
-        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore temporaria.keystore -storepass lorenzopass app/build/outputs/bundle/release/app-release.aab lorenzoalias
-        mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
-
-    - name: Disponibilizar AAB do Lorenzo para Download
+    - name: Disponibilizar Arquivos para Download
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: Lorenzo-VJGames-AAB-Final
-        path: app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
-
-    - name: Disponibilizar Certificado PEM para Download
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: Certificado-Google-PEM
-        path: certificado_lorenzo.pem
+        name: Chaves-Definitivas-VJGames
+        path: |
+          certificado_lorenzo_definitivo.pem
+          texto_base64.txt
