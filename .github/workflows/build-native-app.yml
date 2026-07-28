@@ -11,7 +11,8 @@ jobs:
       run: |
         keytool -genkey -v -keystore lorenzo_definitivo.keystore -alias lorenzoalias -keyalg RSA -keysize 2048 -validity 10000 -storepass "VjG4m3s#Lorenzo99!" -keypass "VjG4m3s#Lorenzo99!" -dname "CN=VJ Games, O=VJ Games, C=BR"
         keytool -export -rfc -keystore lorenzo_definitivo.keystore -alias lorenzoalias -file certificado_lorenzo_definitivo.pem -storepass "VjG4m3s#Lorenzo99!"
-        base64 -i lorenzo_definitivo.keystore -o texto_base64.txt
+        base64 -w 0 lorenzo_definitivo.keystore > texto_base64.txt
+
 
     - name: Disponibilizar Arquivos para Download
       uses: actions/upload-artifact@v4.4.3
