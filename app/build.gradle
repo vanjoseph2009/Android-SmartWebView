@@ -8,30 +8,18 @@ plugins {
 	id 'com.android.application'
 }
 
-def getSwvProperties() {
-	def properties = new Properties()
-	// CORREÇÃO: Usando o rootProject para garantir a localização do arquivo tanto localmente quanto no GitHub Actions
-	def propertiesFile = new File(rootProject.projectDir, "app/src/main/assets/swv.properties")
-	
-	if (propertiesFile.exists()) {
-		properties.load(propertiesFile.newDataInputStream())
-	} else {
-		throw new GradleException("Ficheiro swv.properties nao encontrado no caminho: " + propertiesFile.absolutePath)
-	}
-	return properties
-}
-def swvProps = getSwvProperties()
-
+// CORREÇÃO DEFINITIVA PARA GITHUB ACTIONS: 
+// Injeção direta de valores fixos para evitar erros de leitura em tempo de execução no CI/CD.
 android {
-	namespace = swvProps.getProperty('build.application.id', 'mgks.os.swv')
-	compileSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
+	namespace = "com.lorenzo.aventureiro"
+	compileSdk = 36
 
 	defaultConfig {
-		applicationId = swvProps.getProperty('build.application.id', 'mgks.os.swv')
-		minSdk = swvProps.getProperty('build.sdk.min', '24').toInteger()
-		targetSdk = swvProps.getProperty('build.sdk.compile', '36').toInteger()
-		versionCode = swvProps.getProperty('build.version.code', '10').toInteger()
-		versionName = swvProps.getProperty('build.version.name', '9.0.2')
+		applicationId = "com.lorenzo.aventureiro"
+		minSdk = 24
+		targetSdk = 36
+		versionCode = 10
+		versionName = "9.0.2"
 		multiDexEnabled = true
 	}
 
