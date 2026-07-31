@@ -9,29 +9,31 @@ plugins {
 }
 
 android {
-	// IMPORTANTE: Este bloco força a Google Play a registrar o jogo como com.vjgames.lorenzooaventureiro
-	// independentemente do nome das pastas Java internas do projeto.
-	namespace 'com.vjgames.lorenzooaventureiro'
+	// Mantenha o namespace original do motor. Isto garante que TODAS as classes Java 
+	// nativas e os arquivos R.java do Smart WebView compilem sem erros de importação.
+	namespace 'mgks.os.swv'
 	compileSdk = 34
 
 	defaultConfig {
+		// É AQUI que a mágica acontece: O applicationId diz à Google Play Store 
+		// que o pacote oficial do jogo é o seu, substituindo o ID de forma transparente.
 		applicationId 'com.vjgames.lorenzooaventureiro'
 		minSdk = 24
 		targetSdk = 34
 		versionCode = 10
 		versionName = "9.0.2"
-		multiDexEnabled = true
+		multiDexEnabled true
 	}
 
 	buildTypes {
 		release {
-			minifyEnabled = false
+			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
 
 	buildFeatures {
-		buildConfig = true
+		buildConfig true
 	}
 
 	compileOptions {
