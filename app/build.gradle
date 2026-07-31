@@ -9,27 +9,27 @@ plugins {
 }
 
 android {
-	namespace = 'mgks.os.swv'
+	namespace 'mgks.os.swv'
 	compileSdk = 34
 
 	defaultConfig {
-		applicationId = 'com.vjgames.lorenzooaventureiro'
+		applicationId 'com.vjgames.lorenzooaventureiro'
 		minSdk = 24
 		targetSdk = 34
 		versionCode = 10
 		versionName = "9.0.2"
-		multiDexEnabled = true
+		multiDexEnabled true
 	}
 
 	buildTypes {
 		release {
-			minifyEnabled = false
+			minifyEnabled false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
 
 	buildFeatures {
-		buildConfig = true
+		buildConfig true
 	}
 
 	compileOptions {
@@ -45,7 +45,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// AndroidX Jetpack Core - O motor puro e necessário para o WebView funcionar
+	// Bibliotecas Base Core do Android
 	implementation 'com.google.android.material:material:1.12.0'
 	implementation 'androidx.core:core-splashscreen:1.0.1'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -53,4 +53,9 @@ dependencies {
 	implementation 'androidx.appcompat:appcompat:1.7.0'
 	implementation 'androidx.browser:browser:1.8.0'
 	implementation 'androidx.work:work-runtime:2.9.0'
+
+	// Suporte Nativo aos Plugins do Smart WebView para evitar erros de símbolos Java
+	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+	implementation 'androidx.biometric:biometric:1.1.0'
+	implementation 'com.google.android.gms:play-services-location:21.3.0'
 }
