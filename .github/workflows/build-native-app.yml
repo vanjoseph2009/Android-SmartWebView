@@ -22,8 +22,12 @@ jobs:
     - name: Configurar Android SDK e Aceitar Licenças
       uses: android-actions/setup-android@v3.2.1
 
-    - name: Configurar Gradle Global no Executor
+    - name: Configurar Gradle Estável no Executor
+      # CORREÇÃO CRÍTICA: Força o GitHub a descarregar e utilizar a versão 8.4 do Gradle.
+      # Esta versão é a ideal e compatível com o ecossistema de plug-ins do Smart WebView v8.
       uses: gradle/actions/setup-gradle@v4.1.0
+      with:
+        gradle-version: '8.4'
 
     - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
       run: |
@@ -33,10 +37,9 @@ jobs:
       run: |
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > oficial.keystore
 
-    - name: Compilar App Bundle Nativo usando Gradle Global
-      # CORREÇÃO DEFINITIVA: Substituído o comando "./gradlew" por "gradle" puro.
-      # Isto ignora o ficheiro gradlew local que está corrompido e usa o motor oficial do GitHub.
-      run: CI=false gradle clean app:bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
+    - name: Compilar App Bundle Nativo usando Gradle 8.4
+      # Comando ajustado para a sintaxe pura da versão estabilizada
+      run: CI=false gradle clean :app:bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
