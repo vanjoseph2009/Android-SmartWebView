@@ -34,10 +34,6 @@ jobs:
           sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
         fi
         rm -f app/src/main/res/values/ads.xml || true
-        if [ -f app/build.gradle ]; then
-          sed -i 's/namespace .*/namespace "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
-          sed -i 's/applicationId .*/applicationId "com.vjgames.lorenzooaventureiro"/g' app/build.gradle || true
-        fi
         find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv.plugins;/package com.vjgames.lorenzooaventureiro.plugins;/g' {} + || true
         find app/src/main/java/ -name "*.java" -exec sed -i 's/package mgks.os.swv;/package com.vjgames.lorenzooaventureiro;/g' {} + || true
         find app/src/main/java/ -name "*.java" -exec sed -i 's/mgks.os.swv/com.vjgames.lorenzooaventureiro/g' {} + || true
@@ -53,7 +49,7 @@ jobs:
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > oficial.keystore
 
     - name: Compilar App Bundle Nativo (bundleRelease)
-      run: ./gradlew clean bundleRelease --no-daemon
+      run: CI=false ./gradlew clean bundleRelease --no-daemon
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
