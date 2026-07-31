@@ -1,5 +1,5 @@
 /*
-  Smart WebView v8 - Versão de Produção Estabilizada para CI/CD
+  Smart WebView v8 - Versão de Produção Adaptada para GitHub Actions
   https://github.com
   MIT License — https://opensource.org  
 */
@@ -9,9 +9,10 @@ plugins {
 }
 
 android {
-	// IMPORTANTE: Deixe os valores padrão abaixo. O script do GitHub Actions 
-	// irá substituir dinamicamente por "com.vjgames.lorenzooaventureiro" em tempo de execução.
-	namespace "mgks.os.swv"
+	// ATENÇÃO: Mantenha estas linhas exatamente com o texto "mgks.os.swv".
+	// O seu script .yml do GitHub Actions precisa encontrar este texto padrão
+	// para conseguir renomear tudo para "com.vjgames.lorenzooaventureiro" com sucesso.
+	namespace 'mgks.os.swv'
 	compileSdk 34
 
 	defaultConfig {
@@ -35,8 +36,8 @@ android {
 	}
 
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_1_8
-		targetCompatibility = JavaVersion.VERSION_1_8
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 }
 
@@ -47,7 +48,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Google Play Services Básicos Estabilizados (Sem travas de ficheiros ausentes)
+	// Google Play Services Básicos Estabilizados (Sem travas de chaves Firebase ausentes)
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
@@ -60,7 +61,7 @@ dependencies {
 	implementation 'androidx.browser:browser:1.8.0'
 	implementation 'androidx.work:work-runtime:2.9.0'
 
-	// Plugins Nativos Isolados
+	// Plugins Nativos Isolados do Smart WebView
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
 }
