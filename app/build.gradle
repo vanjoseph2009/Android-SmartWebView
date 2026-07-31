@@ -1,5 +1,5 @@
 /*
-  Smart WebView v8 - Versão de Produção para GitHub Actions (Sintaxe Alinhada)
+  Smart WebView v8 - CI/CD Compatibility Layer
   https://github.com
   MIT License — https://opensource.org  
 */
@@ -9,9 +9,9 @@ plugins {
 }
 
 android {
-	// IMPORTANTE: Mantenha as aspas simples exatamente como estão abaixo.
-	// O comando sed do seu script .yml precisa deste formato para fazer
-	// a substituição limpa em tempo de execução sem corromper a sintaxe.
+	// IMPORTANTE: Não use o sinal de igual (=) aqui. O script .yml do seu GitHub 
+	// usa uma expressão regular que espera a sintaxe sem igual. Mantendo este formato,
+	// o comando 'sed' fará a colagem perfeita e manterá o Groovy válido.
 	namespace 'mgks.os.swv'
 	compileSdk 34
 
