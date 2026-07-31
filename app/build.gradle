@@ -1,6 +1,6 @@
 /*
-  Smart WebView v8
-  https://github.com
+  Smart WebView v8 - CI/CD Safe Build
+  https://github.com/mgks/Android-SmartWebView
   MIT License — https://opensource.org  
 */
 
@@ -10,7 +10,7 @@ plugins {
 
 android {
 	namespace "com.lorenzo.aventureiro"
-	compileSdk 34 // Rebaixado para 34, que é a versão padrão e estável de suporte para o WebView do Android 14
+	compileSdk 34
 
 	defaultConfig {
 		applicationId "com.lorenzo.aventureiro"
@@ -45,16 +45,8 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Gerenciador Oficial do Firebase (BoM)
-	implementation platform('com.google.firebase:firebase-bom:33.1.1')
-	implementation 'com.google.firebase:firebase-auth'
-	implementation 'com.google.firebase:firebase-config'
-	implementation 'com.google.firebase:firebase-messaging'
-	implementation 'com.google.firebase:firebase-analytics'
-
-	// Google Play Services Estabilizados
+	// Google Play Services Básicos Estabilizados
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
-	implementation 'com.google.android.gms:play-services-ads:23.1.0' 
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
 	// AndroidX Jetpack Core
@@ -66,13 +58,9 @@ dependencies {
 	implementation 'androidx.browser:browser:1.8.0'
 	implementation 'androidx.work:work-runtime:2.9.0'
 
-	// Plugins Nativos Integrados
+	// Plugins Nativos Isolados
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
 }
 
-if (file('google-services.json').exists()) {
-    apply plugin: 'com.google.gms.google-services'
-} else {
-    println "swv-fcm-sync: google-services.json nao encontrado. Pulando configuracao Firebase."
-}
+// O bloco condicional antigo foi removido por completo para evitar que o Gradle Actions intercepte metadados ausentes.
