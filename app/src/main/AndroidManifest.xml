@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Smart WebView v8
+  Smart WebView v8 - Versão de Produção para Lorenzo O Aventureiro
   https://github.com
-
-  A modern, open-source WebView wrapper for building advanced hybrid Android apps.
-  Native features, modular plugins, and full customisation—built for developers.
-
-  - Documentation: https://github.io  
-  - Plugins: https://github.io/plugins  
-  - Discussions: https://github.com/discussions  
-  - Sponsor the Project: https://github.com  
-
   MIT License — https://opensource.org  
-
-  Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 -->
 
 <manifest xmlns:android="http://android.com"
@@ -36,13 +25,13 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-	<!-- Permissions for Optional Features (Add/Remove as needed) -->
+	<!-- Permissions for Optional Features -->
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-	<!-- Permissions for File Access (CORRIGIDO PARA POLÍTICA GOOGLE PLAY - SELETOR NATIVO) -->
+	<!-- Permissions for File Access (CORRIGIDO PARA A POLÍTICA DA GOOGLE PLAY) -->
 	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
 		android:maxSdkVersion="32" />
@@ -50,7 +39,7 @@
 		android:maxSdkVersion="28"
 		tools:ignore="ScopedStorage" />
 
-	<!-- Features (Optional) -->
+	<!-- Features -->
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -114,14 +103,6 @@
 				<data android:mimeType="image/*" />
 			</intent-filter>
 		</activity>
-
-		<!-- Firebase Service -->
-		<service android:name=".Firebase"
-			android:exported="false">
-			<intent-filter>
-				<action android:name="com.google.firebase.MESSAGING_EVENT" />
-			</intent-filter>
-		</service>
 
 		<!-- File Provider -->
 		<provider
