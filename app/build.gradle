@@ -45,19 +45,11 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Gerenciador Oficial do Firebase (BoM) - Alinha todas as versões e resolve os erros de símbolos Java
-	implementation platform('com.google.firebase:firebase-bom:33.1.1')
-	implementation 'com.google.firebase:firebase-auth'
-	implementation 'com.google.firebase:firebase-config'
-	implementation 'com.google.firebase:firebase-messaging'
-	implementation 'com.google.firebase:firebase-analytics'
-
-	// Google Play Services & Anúncios Estabilizados
+	// Google Play Services Básicos Estabilizados
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
-	implementation 'com.google.android.gms:play-services-ads:23.1.0'
 
-	// AndroidX Jetpack Core
+	// AndroidX Jetpack Core (O motor necessário para o WebView funcionar)
 	implementation 'com.google.android.material:material:1.12.0'
 	implementation 'androidx.core:core-splashscreen:1.0.1'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -66,14 +58,7 @@ dependencies {
 	implementation 'androidx.browser:browser:1.8.0'
 	implementation 'androidx.work:work-runtime:2.9.0'
 
-	// Plugins Nativos Integrados
+	// Plugins Nativos Isolados
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
-}
-
-// Injeta o plugin apenas se o arquivo existir, prevenindo falhas caso o json não esteja na raiz do GitHub
-if (file('google-services.json').exists()) {
-    apply plugin: 'com.google.gms.google-services'
-} else {
-    println "swv-fcm-sync: google-services.json nao encontrado. Pulando configuracao nativa do Firebase."
 }
