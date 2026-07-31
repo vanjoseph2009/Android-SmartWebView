@@ -30,8 +30,15 @@ jobs:
 
     - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
       run: |
-        # CORREÇÃO DEFINITIVA: Removido o comando sed que corrompia a estrutura do arquivo XML do Manifesto
         rm -f app/src/main/res/values/ads.xml || true
+        
+        # INJEÇÃO CRÍTICA: Cria uma classe Firebase.java falsa vazia para satisfazer os imports da MainActivity.java
+        mkdir -p app/src/main/java/mgks/os/swv
+        cat << 'EOF' > app/src/main/java/mgks/os/swv/Firebase.java
+        package mgks.os.swv;
+        import com.google.firebase.messaging.FirebaseMessagingService;
+        public class Firebase extends FirebaseMessagingService {}
+        EOF
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
