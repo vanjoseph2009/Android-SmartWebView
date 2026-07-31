@@ -34,6 +34,11 @@ jobs:
           sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
         fi
         rm -f app/src/main/res/values/ads.xml || true
+        
+        # CORREÇÃO CIRÚRGICA: Silencia os imports de bibliotecas removidas para o Java compilar sem erros
+        find app/src/main/java/ -name "*.java" -exec sed -i 's/import com.google.firebase./\/\/ import com.google.firebase./g' {} + || true
+        find app/src/main/java/ -name "*.java" -exec sed -i 's/import com.google.android.gms.ads./\/\/ import com.google.android.gms.ads./g' {} + || true
+        find app/src/main/java/ -name "*.java" -exec sed -i 's/import com.google.android.gms.location./\/\/ import com.google.android.gms.location./g' {} + || true
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
