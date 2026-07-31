@@ -1,10 +1,13 @@
 /*
   Smart WebView v8 - Versão de Produção Estabilizada para VJGames
   https://github.com
+  MIT License — https://opensource.org  
 */
 
 plugins {
 	id 'com.android.application'
+	// INCLUSÃO OBRIGATÓRIA: Adiciona o plug-in do Google Services para o Gradle conseguir ler as dependências do Firebase
+	id 'com.google.gms.google-services' version '4.4.2' apply false
 }
 
 android {
@@ -27,6 +30,10 @@ android {
 		}
 	}
 
+	buildFeatures {
+		buildConfig true
+	}
+
 	compileOptions {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
@@ -34,15 +41,41 @@ android {
 }
 
 dependencies {
-	// ... (outras dependências padrão)
+	testImplementation 'junit:junit:4.13.2'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-	// ALINHAMENTO OFICIAL DE VERSÕES DO FIREBASE (Evita erros de desugaring)
+	implementation fileTree(include: ['*.jar'], dir: 'libs')
+	implementation 'androidx.multidex:multidex:2.0.1'
+
+	// Gerenciador Oficial do Firebase (BoM) - Alinha todas as versões e resolve os erros de símbolos Java
 	implementation platform('com.google.firebase:firebase-bom:33.1.1')
 	implementation 'com.google.firebase:firebase-auth'
+	implementation 'com.google.firebase:firebase-config'
+	implementation 'com.google.firebase:firebase-messaging'
 	implementation 'com.google.firebase:firebase-analytics'
 
-	// Google Play Services & Anúncios em Versão LTS Harmônica
+	// Google Play Services & Anúncios Estabilizados
+	implementation 'com.google.android.gms:play-services-auth:21.2.0'
+	implementation 'com.google.android.gms:play-services-location:21.3.0'
 	implementation 'com.google.android.gms:play-services-ads:23.1.0'
-	
-	// ... (dependências de interface e outros plugins)
+
+	// AndroidX Jetpack Core
+	implementation 'com.google.android.material:material:1.12.0'
+	implementation 'androidx.core:core-splashscreen:1.0.1'
+	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+	implementation 'androidx.appcompat:appcompat:1.7.0'
+	implementation 'androidx.browser:browser:1.8.0'
+	implementation 'androidx.work:work-runtime:2.9.0'
+
+	// Plugins Nativos Integrados do Smart WebView
+	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+	implementation 'androidx.biometric:biometric:1.1.0'
+}
+
+// Injeta o plugin apenas se o arquivo real ou simulado existir na raiz
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    println "swv-fcm-sync: google-services.json nao encontrado. Pulando configuracao nativa do Firebase."
 }
