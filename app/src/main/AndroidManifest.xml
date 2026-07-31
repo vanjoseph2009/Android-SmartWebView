@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  Smart WebView v8 - Versão de Produção para Lorenzo O Aventureiro
+  Smart WebView v8 - Versão de Produção Estabilizada para Lorenzo O Aventureiro
   https://github.com
   MIT License — https://opensource.org  
 -->
@@ -52,11 +52,6 @@
 		android:theme="@style/Theme.App.Starting"
 		android:hardwareAccelerated="true"
 		tools:ignore="UnusedAttribute">
-
-		<property
-			android:name="android.adservices.AD_SERVICES_CONFIG"
-			android:resource="@xml/gma_ad_services_config"
-			tools:replace="android:resource" />
 
 		<!-- Main Activity -->
 		<activity
