@@ -1,6 +1,6 @@
 /*
-  Smart WebView v8 - Versão de Produção Estabilizada para GitHub Actions
-  https://github.com
+  Smart WebView v8 - CI/CD Compatibility Layer for VJGames
+  https://github.com/mgks/Android-SmartWebView
   MIT License — https://opensource.org  
 */
 
@@ -9,12 +9,14 @@ plugins {
 }
 
 android {
-	// O script do GitHub Actions irá reescrever esta linha para com.vjgames.lorenzooaventureiro
-	namespace 'mgks.os.swv'
+	// IMPORTANTE: Mantenha exatamente o termo 'namespace .*' com aspas duplas.
+	// O script do seu GitHub usa a regex 's/namespace .*/.../g'. Se houver um sinal
+	// de igual (=), o script remove-o por engano e corrompe o arquivo do Gradle.
+	namespace "mgks.os.swv"
 	compileSdk 34
 
 	defaultConfig {
-		applicationId 'mgks.os.swv'
+		applicationId "mgks.os.swv"
 		minSdk 24
 		targetSdk 34
 		versionCode 10
@@ -24,9 +26,7 @@ android {
 
 	buildTypes {
 		release {
-			// DESATIVADO: Evita que o compilador do GitHub quebre por falta de ficheiros Proguard nativos
 			minifyEnabled false
-			shrinkResources false
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 		}
 	}
@@ -36,25 +36,32 @@ android {
 	}
 
 	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_17
-		targetCompatibility JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 }
 
 dependencies {
+	testImplementation 'junit:junit:4.13.2'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
-	
-	// Bibliotecas Base Core de Estabilidade
-	implementation 'androidx.appcompat:appcompat:1.6.1'
-	implementation 'com.google.android.material:material:1.9.0'
-	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 	implementation 'androidx.multidex:multidex:2.0.1'
-	
-	// Recursos de Navegação WebView Nativos
+
+	// Google Play Services Básicos Estabilizados (Evita quebras de chaves ausentes)
+	implementation 'com.google.android.gms:play-services-auth:21.2.0'
+	implementation 'com.google.android.gms:play-services-location:21.3.0'
+
+	// AndroidX Jetpack Core
+	implementation 'com.google.android.material:material:1.12.0'
+	implementation 'androidx.core:core-splashscreen:1.0.1'
+	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 	implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-	implementation 'androidx.browser:browser:1.5.0'
-	
-	// Plugins nativos básicos integrados (Versões estáveis em Gradle)
+	implementation 'androidx.appcompat:appcompat:1.7.0'
+	implementation 'androidx.browser:browser:1.8.0'
+	implementation 'androidx.work:work-runtime:2.9.0'
+
+	// Plugins Nativos Isolados do Smart WebView
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
 }
