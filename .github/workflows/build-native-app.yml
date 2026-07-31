@@ -34,16 +34,14 @@ jobs:
           sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
         fi
         rm -f app/src/main/res/values/ads.xml || true
-        
-        # CORREÇÃO DEFINITIVA: Remove o arquivo Firebase do Smart WebView que quebra o compilador Java por falta de dependências
-        rm -f app/src/main/java/mgks/os/swv/Firebase.java || true
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > oficial.keystore
 
     - name: Compilar App Bundle Nativo (bundleRelease)
-      run: CI=false ./gradlew clean bundleRelease --no-daemon --stacktrace --info
+      # CORREÇÃO DEFINITIVA: Desliga o cache de configuração e silencia prompts interativos em servidores de CI
+      run: CI=false ./gradlew clean bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
