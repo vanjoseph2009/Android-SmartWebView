@@ -1,5 +1,5 @@
 /*
-  Smart WebView v8 - Versão de Produção Adaptada para GitHub Actions
+  Smart WebView v8 - Versão de Produção para GitHub Actions (Sintaxe Alinhada)
   https://github.com
   MIT License — https://opensource.org  
 */
@@ -9,14 +9,14 @@ plugins {
 }
 
 android {
-	// ATENÇÃO: Mantenha estas linhas exatamente com o texto "mgks.os.swv".
-	// O seu script .yml do GitHub Actions precisa encontrar este texto padrão
-	// para conseguir renomear tudo para "com.vjgames.lorenzooaventureiro" com sucesso.
+	// IMPORTANTE: Mantenha as aspas simples exatamente como estão abaixo.
+	// O comando sed do seu script .yml precisa deste formato para fazer
+	// a substituição limpa em tempo de execução sem corromper a sintaxe.
 	namespace 'mgks.os.swv'
 	compileSdk 34
 
 	defaultConfig {
-		applicationId "mgks.os.swv"
+		applicationId 'mgks.os.swv'
 		minSdk 24
 		targetSdk 34
 		versionCode 10
@@ -48,7 +48,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Google Play Services Básicos Estabilizados (Sem travas de chaves Firebase ausentes)
+	// Google Play Services Básicos Estabilizados
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
