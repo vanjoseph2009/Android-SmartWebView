@@ -34,10 +34,6 @@ jobs:
           sed -i 's/package=".*"//g' app/src/main/AndroidManifest.xml || true
         fi
         rm -f app/src/main/res/values/ads.xml || true
-        
-        # CORREÇÃO DEFINITIVA: Remove os arquivos de plugins legados e Firebase que causavam falhas por falta de pacotes
-        rm -f app/src/main/java/mgks/os/swv/Firebase.java || true
-        rm -rf app/src/main/java/mgks/os/swv/plugins || true
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
