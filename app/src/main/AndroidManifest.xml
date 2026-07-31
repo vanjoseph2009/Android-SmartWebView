@@ -2,23 +2,23 @@
 
 <!--
   Smart WebView v8
-  https://github.com/mgks/Android-SmartWebView
+  https://github.com
 
   A modern, open-source WebView wrapper for building advanced hybrid Android apps.
   Native features, modular plugins, and full customisation—built for developers.
 
-  - Documentation: https://mgks.github.io/Android-SmartWebView/documentation  
-  - Plugins: https://mgks.github.io/Android-SmartWebView/documentation/plugins  
-  - Discussions: https://github.com/mgks/Android-SmartWebView/discussions  
-  - Sponsor the Project: https://github.com/sponsors/mgks  
+  - Documentation: https://github.io  
+  - Plugins: https://github.io/plugins  
+  - Discussions: https://github.com/discussions  
+  - Sponsor the Project: https://github.com  
 
-  MIT License — https://opensource.org/licenses/MIT  
+  MIT License — https://opensource.org  
 
   Mentioning Smart WebView in your project helps others find it and keeps the dev loop alive.
 -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://android.com"
+	xmlns:tools="http://android.com"
 	package="mgks.os.swv">
 
 	<supports-screens
@@ -42,10 +42,7 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-	<!-- Permissions for File Access (Scoped Storage) -->
-	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+	<!-- Permissions for File Access (CORRIGIDO PARA POLÍTICA GOOGLE PLAY - SELETOR NATIVO) -->
 	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
 		android:maxSdkVersion="32" />
