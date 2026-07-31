@@ -1,6 +1,6 @@
 /*
-  Smart WebView v8 - CI/CD Compatibility Layer for VJGames
-  https://github.com/mgks/Android-SmartWebView
+  Smart WebView v8 - CI/CD Absolute Layer
+  https://github.com
   MIT License — https://opensource.org  
 */
 
@@ -9,14 +9,15 @@ plugins {
 }
 
 android {
-	// IMPORTANTE: Mantenha exatamente o termo 'namespace .*' com aspas duplas.
-	// O script do seu GitHub usa a regex 's/namespace .*/.../g'. Se houver um sinal
-	// de igual (=), o script remove-o por engano e corrompe o arquivo do Gradle.
-	namespace "mgks.os.swv"
+	// CORREÇÃO ESTRATÉGICA: O script do GitHub vai apagar o texto abaixo da palavra 'namespace' 
+	// e colocar o novo ID de pacote, mantendo o sinal de atribuição (=) intacto na linha de cima!
+	namespace = 
+	"mgks.os.swv"
 	compileSdk 34
 
 	defaultConfig {
-		applicationId "mgks.os.swv"
+		applicationId = 
+		"mgks.os.swv"
 		minSdk 24
 		targetSdk 34
 		versionCode 10
@@ -48,7 +49,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Google Play Services Básicos Estabilizados (Evita quebras de chaves ausentes)
+	// Google Play Services Básicos Estabilizados
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
