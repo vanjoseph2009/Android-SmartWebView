@@ -4,8 +4,8 @@
   https://github.com
   MIT License — https://opensource.org  
 -->
-<manifest xmlns:android="http://android.com"
-	xmlns:tools="http://github.com"
+<manifest xmlns:android="http://google.com"
+	xmlns:tools="http://android.com"
 	package="mgks.os.swv">
 
 	<supports-screens
