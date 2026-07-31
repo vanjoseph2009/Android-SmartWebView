@@ -9,11 +9,13 @@ plugins {
 }
 
 android {
-	namespace = 'com.vjgames.lorenzooaventureiro'
+	// IMPORTANTE: Este bloco força a Google Play a registrar o jogo como com.vjgames.lorenzooaventureiro
+	// independentemente do nome das pastas Java internas do projeto.
+	namespace 'com.vjgames.lorenzooaventureiro'
 	compileSdk = 34
 
 	defaultConfig {
-		applicationId = 'com.vjgames.lorenzooaventureiro'
+		applicationId 'com.vjgames.lorenzooaventureiro'
 		minSdk = 24
 		targetSdk = 34
 		versionCode = 10
