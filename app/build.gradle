@@ -1,5 +1,5 @@
 /*
-  Smart WebView v8 - CI/CD Absolute Layer
+  Smart WebView v8 - Versão de Produção Estabilizada para VJGames
   https://github.com
   MIT License — https://opensource.org  
 */
@@ -9,15 +9,12 @@ plugins {
 }
 
 android {
-	// CORREÇÃO ESTRATÉGICA: O script do GitHub vai apagar o texto abaixo da palavra 'namespace' 
-	// e colocar o novo ID de pacote, mantendo o sinal de atribuição (=) intacto na linha de cima!
-	namespace = 
-	"mgks.os.swv"
+	// IMPORTANTE: Sintaxe alinhada para aceitar substituições dinâmicas sem quebrar o Groovy
+	namespace 'com.vjgames.lorenzooaventureiro'
 	compileSdk 34
 
 	defaultConfig {
-		applicationId = 
-		"mgks.os.swv"
+		applicationId 'com.vjgames.lorenzooaventureiro'
 		minSdk 24
 		targetSdk 34
 		versionCode 10
@@ -49,7 +46,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Google Play Services Básicos Estabilizados
+	// Google Play Services Básicos
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
@@ -62,7 +59,7 @@ dependencies {
 	implementation 'androidx.browser:browser:1.8.0'
 	implementation 'androidx.work:work-runtime:2.9.0'
 
-	// Plugins Nativos Isolados do Smart WebView
+	// Plugins Nativos
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
 }
