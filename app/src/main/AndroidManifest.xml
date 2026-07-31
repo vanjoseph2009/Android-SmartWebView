@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   Smart WebView v8 - Versão de Produção Estabilizada para Lorenzo O Aventureiro
   https://github.com
   MIT License — https://opensource.org  
 -->
-
 <manifest xmlns:android="http://android.com"
-	xmlns:tools="http://android.com"
+	xmlns:tools="http://github.com"
 	package="mgks.os.swv">
 
 	<supports-screens
@@ -25,19 +23,21 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-	<!-- Permissions for Optional Features -->
+	<!-- Optional Features -->
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-	<!-- Permissions for File Access (CORRIGIDO PARA A POLÍTICA DA GOOGLE PLAY) -->
+	<!-- CORREÇÃO POLÍTICA GOOGLE PLAY: Remove as permissões amplas de armazenamento que causavam rejeição -->
+	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
+	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
+	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
+
+	<!-- Permissão Parcial Aceita para o Seletor Nativo Seguro -->
 	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-		android:maxSdkVersion="32" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-		android:maxSdkVersion="28"
-		tools:ignore="ScopedStorage" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" tools:ignore="ScopedStorage" />
 
 	<!-- Features -->
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
