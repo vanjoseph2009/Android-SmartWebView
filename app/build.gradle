@@ -1,6 +1,6 @@
 /*
-  Smart WebView v8 - CI/CD Safe Build
-  https://github.com/mgks/Android-SmartWebView
+  Smart WebView v8 - Versão de Produção Estabilizada para CI/CD
+  https://github.com
   MIT License — https://opensource.org  
 */
 
@@ -9,11 +9,13 @@ plugins {
 }
 
 android {
-	namespace "com.lorenzo.aventureiro"
+	// IMPORTANTE: Deixe os valores padrão abaixo. O script do GitHub Actions 
+	// irá substituir dinamicamente por "com.vjgames.lorenzooaventureiro" em tempo de execução.
+	namespace "mgks.os.swv"
 	compileSdk 34
 
 	defaultConfig {
-		applicationId "com.lorenzo.aventureiro"
+		applicationId "mgks.os.swv"
 		minSdk 24
 		targetSdk 34
 		versionCode 10
@@ -45,7 +47,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// Google Play Services Básicos Estabilizados
+	// Google Play Services Básicos Estabilizados (Sem travas de ficheiros ausentes)
 	implementation 'com.google.android.gms:play-services-auth:21.2.0'
 	implementation 'com.google.android.gms:play-services-location:21.3.0'
 
@@ -62,5 +64,3 @@ dependencies {
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
 }
-
-// O bloco condicional antigo foi removido por completo para evitar que o Gradle Actions intercepte metadados ausentes.
