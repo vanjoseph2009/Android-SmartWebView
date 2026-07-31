@@ -22,34 +22,21 @@ jobs:
     - name: Configurar Android SDK e Aceitar Licenças
       uses: android-actions/setup-android@v3.2.1
 
-    - name: Garantir Permissões do Compilador
-      run: |
-        chmod +x gradlew
-        mkdir -p "$ANDROID_HOME/licenses" || true
-        echo "24a335a4f57f80877430e4ae15220d914f646721" > "$ANDROID_HOME/licenses/android-sdk-license" || true
+    - name: Configurar Gradle Global no Executor
+      uses: gradle/actions/setup-gradle@v4.1.0
 
-    - name: Saneamento Nativo de Dependências e Conflitos do Motor v8
+    - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
       run: |
         rm -f app/src/main/res/values/ads.xml || true
-        
-        # SANEAMENTO CIRÚRGICO: Comenta linhas internas que chamavam o MobileAds e o Firebase na MainActivity.java
-        if [ -f app/src/main/java/mgks/os/swv/MainActivity.java ]; then
-          sed -i 's/import com.google.android.gms.ads./\/\/ import com.google.android.gms.ads./g' app/src/main/java/mgks/os/swv/MainActivity.java || true
-          sed -i 's/import com.google.firebase./\/\/ import com.google.firebase./g' app/src/main/java/mgks/os/swv/MainActivity.java || true
-          sed -i 's/MobileAds.initialize/\/\/ MobileAds.initialize/g' app/src/main/java/mgks/os/swv/MainActivity.java || true
-        fi
-        
-        # Evita que o compilador de recursos procure a classe deletada do Firebase
-        if [ -f app/src/main/java/mgks/os/swv/Firebase.java ]; then
-          rm -f app/src/main/java/mgks/os/swv/Firebase.java || true
-        fi
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
         echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > oficial.keystore
 
-    - name: Compilar App Bundle Nativo (bundleRelease)
-      run: CI=false ./gradlew clean bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
+    - name: Compilar App Bundle Nativo usando Gradle Global
+      # CORREÇÃO DEFINITIVA: Substituído o comando "./gradlew" por "gradle" puro.
+      # Isto ignora o ficheiro gradlew local que está corrompido e usa o motor oficial do GitHub.
+      run: CI=false gradle clean app:bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
