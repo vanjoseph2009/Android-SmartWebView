@@ -419,7 +419,6 @@ public class Functions{
         try {
             // Check if Firebase is initialized before proceeding
             // This call throws IllegalStateException if google-services.json was missing
-            FirebaseMessaging.getInstance().getToken()
                 .addOnSuccessListener(token -> {
                     if (!SWVContext.ASWP_OFFLINE) {
                         set_cookie("FCM_TOKEN=" + token);
