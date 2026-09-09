@@ -114,9 +114,10 @@
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
 
+		<!-- ID REAL E ATUALIZADO DO ADMOB DO SEU JOGO (LINHA 148 REPARADA) -->
 		<meta-data
 			android:name="com.google.android.gms.ads.APPLICATION_ID"
-			android:value="@string/admob_app_id"/>
+			android:value="ca-app-pub-6917222908830790~9513293436"/>
 
 	</application>
 </manifest>
