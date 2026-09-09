@@ -4,7 +4,7 @@
   https://github.com
   MIT License — https://opensource.org  
 -->
-<manifest xmlns:android="http://google.com"
+<manifest xmlns:android="http://android.com"
 	xmlns:tools="http://android.com"
 	package="mgks.os.swv">
 
@@ -16,30 +16,30 @@
 		android:normalScreens="true"
 		android:xlargeScreens="true" />
 
-	<!-- Essential Permissions -->
+	<!-- Permissões Essenciais -->
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 
-	<!-- Optional Features -->
+	<!-- Recursos Opcionais -->
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-	<!-- CORREÇÃO POLÍTICA GOOGLE PLAY: Remove as permissões amplas de armazenamento que causavam rejeição -->
+	<!-- REMOÇÃO TOTAL DE PERMISSÕES AMPLAS (Adequação à política da Google Play) -->
 	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
 	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
 	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
+	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" tools:node="remove" />
 
-	<!-- Permissão Parcial Aceita para o Seletor Nativo Seguro -->
-	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+	<!-- Compatibilidade segura e limitada para versões legadas (Android 12 ou anterior) -->
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" tools:ignore="ScopedStorage" />
 
-	<!-- Features -->
+	<!-- Features de Hardware -->
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false" />
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
