@@ -45,8 +45,6 @@ import android.widget.Toast;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-
 import java.lang.reflect.Field;
 import java.math.BigInteger;
 
