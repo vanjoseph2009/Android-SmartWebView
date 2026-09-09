@@ -4,11 +4,7 @@
   MIT License — https://opensource.org  
 */
 
-plugins {
-	id 'com.android.application'
-	// Plugin necessário para o Firebase ler o arquivo de configuração google-services.json
-	id 'com.google.gms.google-services'
-}
+apply plugin: 'com.android.application'
 
 android {
 	namespace = 'mgks.os.swv'
@@ -47,7 +43,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	implementation 'androidx.multidex:multidex:2.0.1'
 
-	// AndroidX Jetpack Core Puro
+	// AndroidX Jetpack Core Puro (Carregamento rápido do jogo)
 	implementation 'com.google.android.material:material:1.12.0'
 	implementation 'androidx.core:core-splashscreen:1.0.1'
 	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -62,8 +58,4 @@ dependencies {
 
 	// Biblioteca do Google Play Services Ads (AdMob)
 	implementation 'com.google.android.gms:play-services-ads:23.2.0'
-
-	// CORREÇÃO DE COMPILAÇÃO: Plataforma Firebase e Mensagens Push (FCM)
-	implementation platform('com.google.firebase:firebase-bom:33.1.2')
-	implementation 'com.google.firebase:firebase-messaging'
 }
