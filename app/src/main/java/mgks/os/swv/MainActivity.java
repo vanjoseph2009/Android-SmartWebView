@@ -135,17 +135,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // CORREÇÃO LOGICA: super.onCreate DEVE ser a primeira linha do método
+        // 1. Inicializa o ciclo de vida nativo do Android
         super.onCreate(savedInstanceState);
 
-        // Handle splash screen
-        final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+        // 2. CORREÇÃO DA LINHA 93: Inicialização limpa e correta da Splash Screen
+        androidx.core.splashscreen.SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
 
-        // 1. FORÇAR A URL CORRETA DO JOGO DIRETO NO MOTOR JAVA (Agora em local seguro)
-        mgks.os.swv.SWVContext.ASWV_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
-        mgks.os.swv.SWVContext.ASWV_APP_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
+        // 3. Força a URL oficial do jogo Lorenzo O Aventureiro no motor Java
+        mgks.os.swv.SWVContext.ASWV_URL = "https://vercel.app";
+        mgks.os.swv.SWVContext.ASWV_APP_URL = "https://vercel.app";
 
-        // 2. MODO IMERSIVO EXECUTADO APÓS A ATIVIDADE CARREGAR
+        // 4. Ativação segura do Modo Imersivo (Tela Cheia)
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
@@ -169,10 +169,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Secure the app on startup if biometric or auth is forced on launch
+        // Bloqueio de capturas de ecrã se ativo nas configurações
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
       
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
