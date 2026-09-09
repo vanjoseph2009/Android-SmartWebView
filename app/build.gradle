@@ -57,4 +57,7 @@ dependencies {
 	// Bibliotecas Nativas Obrigatórias dos Plugins de Interface do Smart WebView
 	implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 	implementation 'androidx.biometric:biometric:1.1.0'
+
+	// CORREÇÃO DE BUILD: Biblioteca do Google Play Services Ads vinculada ao ID do Manifesto
+	implementation 'com.google.android.gms:play-services-ads:23.2.0'
 }
