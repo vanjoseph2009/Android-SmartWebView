@@ -126,13 +126,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
                 @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+        @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        SWVContext.getPluginManager().onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 1. FORÇAR A URL CORRETA DO JOGO DIRETO NO MOTOR JAVA
+        // CORREÇÃO LOGICA: super.onCreate DEVE ser a primeira linha do método
+        super.onCreate(savedInstanceState);
+
+        // Handle splash screen
+        final SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+
+        // 1. FORÇAR A URL CORRETA DO JOGO DIRETO NO MOTOR JAVA (Agora em local seguro)
         mgks.os.swv.SWVContext.ASWV_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
         mgks.os.swv.SWVContext.ASWV_APP_URL = "https://lorenzo-o-aventureiro-game.vercel.app";
 
-        // 2. MODO IMERSIVO EXECUTADO APÓS A ATIVIDADE CARREGAR (EVITA ERROS DE QUEDA)
+        // 2. MODO IMERSIVO EXECUTADO APÓS A ATIVIDADE CARREGAR
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
@@ -160,8 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
-
-
       
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -186,8 +197,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-
-
 
         // Enable edge-to-edge display
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
