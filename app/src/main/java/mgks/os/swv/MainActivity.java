@@ -132,20 +132,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SWVContext.getPluginManager().onActivityResult(requestCode, resultCode, intent);
     }
 
-    @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
+        @SuppressLint({"SetJavaScriptEnabled", "WrongViewCast", "JavascriptInterface"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // 1. Inicializa o ciclo de vida nativo do Android
+        // 1. Inicializa o ciclo de vida nativo do Android Studio
         super.onCreate(savedInstanceState);
 
-        // 2. CORREÇÃO DA LINHA 93: Inicialização limpa e correta da Splash Screen
-        androidx.core.splashscreen.SplashScreen splashScreen = androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
+        // 2. CORREÇÃO DA LINHA 88: Chamada direta sem atribuição duplicada de tipo
+        androidx.core.splashscreen.SplashScreen.installSplashScreen(this);
 
-        // 3. Força a URL oficial do jogo Lorenzo O Aventureiro no motor Java
+        // 3. Força a URL estável do Lorenzo O Aventureiro no motor nativo
         mgks.os.swv.SWVContext.ASWV_URL = "https://vercel.app";
         mgks.os.swv.SWVContext.ASWV_APP_URL = "https://vercel.app";
 
-        // 4. Ativação segura do Modo Imersivo (Tela Cheia)
+        // 4. Ativação segura do Modo Imersivo para Jogos (Tela Inteira sem barras)
         getWindow().getDecorView().post(new Runnable() {
             @Override
             public void run() {
@@ -163,13 +163,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                         android.view.View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         android.view.View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        android.view.View.SYSTEM_UI_FLAG_IMMENSIVE_STICKY
                     );
                 }
             }
         });
 
-        // Bloqueio de capturas de ecrã se ativo nas configurações
+        // Restrição de capturas de ecrã caso ativo nas definições globais
         if (SWVContext.ASWP_BLOCK_SCREENSHOTS) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
