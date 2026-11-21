@@ -11,21 +11,21 @@ jobs:
 
     steps:
     - name: Checkout do Código Nativo
-      uses: actions/checkout@v4.2.2
+      uses: actions/checkout@v4
 
     - name: Configurar ambiente Java JDK 17
-      uses: actions/setup-java@v5.5.0
+      uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
         java-version: '17'
 
-    - name: Configurar Android SDK e Aceitar Licenças
-      uses: android-actions/setup-android@v3.2.1
+    - name: Aceitar Licenças do Android SDK Pré-instalado
+      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
     - name: Configurar Gradle Estável no Executor
       # CORREÇÃO CRÍTICA: Força o GitHub a descarregar e utilizar a versão 8.4 do Gradle.
       # Esta versão é a ideal e compatível com o ecossistema de plug-ins do Smart WebView v8.
-      uses: gradle/actions/setup-gradle@v4.1.0
+      uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: '8.4'
 
@@ -43,11 +43,11 @@ jobs:
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
-        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore oficial.keystore -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" app/build/outputs/bundle/release/app-release.aab "${{ secrets.ANDROID_KEY_ALIAS }}"
+        jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore oficial.keystore -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" app/build/outputs/bundle/release/app-release.aab "${{ secrets.ANDROID_KEYSTORE_ALIAS }}"
         mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
 
     - name: Disponibilizar AAB do Lorenzo para Download
-      uses: actions/upload-artifact@v4.4.3
+      uses: actions/upload-artifact@v4
       with:
         name: Lorenzo-VJGames-AAB-Final
         path: app/build/outputs/bundle/release/Lorenzo_O_Aventureiro_Assinado.aab
