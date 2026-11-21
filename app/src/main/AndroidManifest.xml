@@ -4,8 +4,8 @@
   https://github.com
   MIT License — https://opensource.org  
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:android="http://android.com"
+	xmlns:tools="http://android.com"
 	package="mgks.os.swv">
 
 	<supports-screens
@@ -79,23 +79,13 @@
 			</intent-filter>
 		</activity>
 
-		<!-- Share Activity -->
+		<!-- Share Activity (Apenas texto, sem recebimento de imagens externas) -->
 		<activity android:name=".ShareActivity"
 			android:exported="true">
 			<intent-filter android:label="Share">
 				<action android:name="android.intent.action.SEND" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data android:mimeType="text/*" />
-			</intent-filter>
-			<intent-filter android:label="Share Image">
-				<action android:name="android.intent.action.SEND" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="image/*" />
-			</intent-filter>
-			<intent-filter android:label="Share Multiple Images">
-				<action android:name="android.intent.action.SEND_MULTIPLE" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="image/*" />
 			</intent-filter>
 		</activity>
 
@@ -114,7 +104,7 @@
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
 
-		<!-- ID REAL E ATUALIZADO DO ADMOB DO SEU JOGO (LINHA 148 REPARADA) -->
+		<!-- ID REAL E ATUALIZADO DO ADMOB DO SEU JOGO -->
 		<meta-data
 			android:name="com.google.android.gms.ads.APPLICATION_ID"
 			android:value="ca-app-pub-6917222908830790~9513293436"/>
