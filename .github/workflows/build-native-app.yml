@@ -30,15 +30,19 @@ jobs:
     - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
       run: |
         rm -f app/src/main/res/values/ads.xml || true
-        python3 -c '
+        cat << 'EOF' > fix_manifest.py
         import re
         c = chr(58)
+        dom = "schemas" + "." + "android" + "." + "com"
         p = "app/src/main/AndroidManifest.xml"
-        s = open(p).read()
-        s = re.sub(r"xmlns:android=\"[^\"]*\"", f"xmlns{c}android=\"http{c}//://android.com\"", s)
-        s = re.sub(r"xmlns:tools=\"[^\"]*\"", f"xmlns{c}tools=\"http{c}//://android.com\"", s)
-        open(p, "w").write(s)
-        '
+        s = open(p, encoding="utf-8").read()
+        s = re.sub(r'xmlns:android="[^"]*"', f'xmlns{c}android="http{c}//{dom}/apk/res/android"', s)
+        s = re.sub(r'xmlns:tools="[^"]*"', f'xmlns{c}tools="http{c}//{dom}/tools"', s)
+        open(p, "w", encoding="utf-8").write(s)
+        print("OK:", s[:200])
+        EOF
+        sed -i 's/^        //' fix_manifest.py
+        python3 fix_manifest.py
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
