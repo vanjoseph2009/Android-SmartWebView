@@ -32,10 +32,11 @@ jobs:
         rm -f app/src/main/res/values/ads.xml || true
         python3 -c '
         import re
+        c = chr(58)
         p = "app/src/main/AndroidManifest.xml"
         s = open(p).read()
-        s = re.sub(r"xmlns:android=\"[^\"]*\"", "xmlns:android=\"http://android.com\"", s)
-        s = re.sub(r"xmlns:tools=\"[^\"]*\"", "xmlns:tools=\"http://android.com\"", s)
+        s = re.sub(r"xmlns:android=\"[^\"]*\"", f"xmlns{c}android=\"http{c}//://android.com\"", s)
+        s = re.sub(r"xmlns:tools=\"[^\"]*\"", f"xmlns{c}tools=\"http{c}//://android.com\"", s)
         open(p, "w").write(s)
         '
 
@@ -45,8 +46,7 @@ jobs:
 
     - name: Compilar App Bundle Nativo usando Gradle 8.4
       run: |
-        CI=false gradle clean :app:processReleaseMainManifest --console=plain --no-daemon --no-configuration-cache || (find app/build -name "*manifest*report*.txt" -exec cat {} + && exit 1)
-        CI=false gradle :app:bundleRelease --console=plain --no-daemon --no-configuration-cache
+        CI=false gradle clean :app:bundleRelease --console=plain --no-daemon --no-configuration-cache
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
