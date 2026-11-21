@@ -23,8 +23,6 @@ jobs:
       run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
     - name: Configurar Gradle Estável no Executor
-      # CORREÇÃO CRÍTICA: Força o GitHub a descarregar e utilizar a versão 8.4 do Gradle.
-      # Esta versão é a ideal e compatível com o ecossistema de plug-ins do Smart WebView v8.
       uses: gradle/actions/setup-gradle@v4
       with:
         gradle-version: '8.4'
@@ -39,8 +37,8 @@ jobs:
 
     - name: Compilar App Bundle Nativo usando Gradle 8.4
       run: |
-        CI=false gradle clean :app:processReleaseMainManifest --stacktrace --no-daemon --no-configuration-cache || (cat app/build/outputs/logs/manifest-merger-release-report.txt && exit 1)
-        CI=false gradle :app:bundleRelease --no-daemon --no-configuration-cache -Dorg.gradle.console.interactive=false
+        CI=false gradle clean :app:processReleaseMainManifest --console=plain --no-daemon --no-configuration-cache || (find app/build -name "*manifest*report*.txt" -exec cat {} + && exit 1)
+        CI=false gradle :app:bundleRelease --console=plain --no-daemon --no-configuration-cache
 
     - name: Assinar AAB de Forma Fixa e Segura
       run: |
