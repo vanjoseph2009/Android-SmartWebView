@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  Smart WebView v8 - Versão de Produção Estabilizada para Lorenzo O Aventureiro
-  https://github.com
-  MIT License — https://opensource.org  
--->
 <manifest xmlns:android="http://android.com"
-	xmlns:tools="http://android.com"
-	package="mgks.os.swv">
+	xmlns:tools="http://android.com">
 
 	<supports-screens
 		android:anyDensity="true"
@@ -33,7 +27,6 @@
 	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:node="remove" />
 	<uses-permission android:name="android.permission.READ_MEDIA_AUDIO" tools:node="remove" />
 	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:node="remove" />
-	<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" tools:node="remove" />
 
 	<!-- Compatibilidade segura e limitada para versões legadas (Android 12 ou anterior) -->
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
@@ -79,7 +72,7 @@
 			</intent-filter>
 		</activity>
 
-		<!-- Share Activity (Apenas texto, sem recebimento de imagens externas) -->
+		<!-- Share Activity -->
 		<activity android:name=".ShareActivity"
 			android:exported="true">
 			<intent-filter android:label="Share">
