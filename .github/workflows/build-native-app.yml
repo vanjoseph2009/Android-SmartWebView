@@ -30,6 +30,14 @@ jobs:
     - name: Correção de Arquitetura de Namespace, Pacotes e Mapeamento de Plugins
       run: |
         rm -f app/src/main/res/values/ads.xml || true
+        python3 -c '
+        import re
+        p = "app/src/main/AndroidManifest.xml"
+        s = open(p).read()
+        s = re.sub(r"xmlns:android=\"[^\"]*\"", "xmlns:android=\"http://android.com\"", s)
+        s = re.sub(r"xmlns:tools=\"[^\"]*\"", "xmlns:tools=\"http://android.com\"", s)
+        open(p, "w").write(s)
+        '
 
     - name: Restaurar Chave Keystore Definitiva
       run: |
